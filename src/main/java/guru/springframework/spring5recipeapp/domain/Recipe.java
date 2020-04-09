@@ -22,9 +22,6 @@ public class Recipe {
     private String url;
     private String directions;
 
-    //TODO add
-    //private Difficulty difficulty;
-
     /*
     cascade: Recipe owns this.
     mappedBy: property on the child class.
@@ -41,6 +38,11 @@ public class Recipe {
     @Lob
     private Byte[] image;
 
+    /*
+    ORDINAL is the default value (1, 2, 3). Use STRING instead (EASY, HARD etc.)
+     */
+    @Enumerated(value = EnumType.STRING)
+    private Difficulty difficulty;
 
     /*
     One to One property.
@@ -144,5 +146,11 @@ public class Recipe {
         this.notes = notes;
     }
 
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
 
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
 }
