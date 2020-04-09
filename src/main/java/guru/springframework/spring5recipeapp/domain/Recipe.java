@@ -1,6 +1,7 @@
 package guru.springframework.spring5recipeapp.domain;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class Recipe {
@@ -21,8 +22,18 @@ public class Recipe {
     private String url;
     private String directions;
 
-    //todo add
+    //TODO add
     //private Difficulty difficulty;
+
+    /*
+    cascade: Recipe owns this.
+    mappedBy: property on the child class.
+    mappedBy = "recipe", target property on the Ingredient class
+    This Recipe will get stored on a property recipe on the child
+    Bi-directional relationship
+     */
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
+    private Set<Ingredient> ingredients;
 
     /*
    This will get created as a binary large object field, BLOB inside the database
@@ -39,6 +50,11 @@ public class Recipe {
     @OneToOne(cascade = CascadeType.ALL)
     private Notes notes;
 
+
+
+    /*
+    Getters and Setters
+     */
 
     public Long getId() {
         return id;
@@ -102,6 +118,14 @@ public class Recipe {
 
     public void setDirections(String directions) {
         this.directions = directions;
+    }
+
+    public Set<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(Set<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 
     public Byte[] getImage() {
