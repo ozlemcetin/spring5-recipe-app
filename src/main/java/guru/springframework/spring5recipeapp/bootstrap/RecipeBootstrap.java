@@ -72,35 +72,34 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
                     "\n" +
                     "Read more: http://www.simplyrecipes.com/recipes/perfect_guacamole/#ixzz4jvpiV9Sd");
 
-
             {
-                Set<Ingredient> ingredients = new HashSet<>();
+                /*
+                  Bi-Directional Relationship - addIngredient
+                 */
 
                 //2 ripe avocados
-                ingredients.add(new Ingredient("ripe avocados", new BigDecimal(2), eachUom, guacRecipe));
+                guacRecipe.addIngredientBiDR(new Ingredient("ripe avocados", new BigDecimal(2), eachUom));
 
                 //1 / 4 teaspoon of salt, more to taste
-                ingredients.add(new Ingredient("Kosher salt", new BigDecimal(".5"), teaSpoonUom, guacRecipe));
+                guacRecipe.addIngredientBiDR(new Ingredient("Kosher salt", new BigDecimal(".5"), teaSpoonUom));
 
                 // 1 tablespoon fresh lime juice or lemon juice
-                ingredients.add(new Ingredient("fresh lime juice or lemon juice", new BigDecimal(2), tableSpoonUom, guacRecipe));
+                guacRecipe.addIngredientBiDR(new Ingredient("fresh lime juice or lemon juice", new BigDecimal(2), tableSpoonUom));
 
                 // 2 tablespoons to 1 / 4 cup of minced red onion or thinly sliced green onion
-                ingredients.add(new Ingredient("minced red onion or thinly sliced green onion", new BigDecimal(2), tableSpoonUom, guacRecipe));
+                guacRecipe.addIngredientBiDR(new Ingredient("minced red onion or thinly sliced green onion", new BigDecimal(2), tableSpoonUom));
 
                 // 1 - 2 serrano chiles, stems and seeds removed, minced
-                ingredients.add(new Ingredient("serrano chiles, stems and seeds removed, minced", new BigDecimal(2), eachUom, guacRecipe));
+                guacRecipe.addIngredientBiDR(new Ingredient("serrano chiles, stems and seeds removed, minced", new BigDecimal(2), eachUom));
 
                 // 2 tablespoons cilantro (leaves and tender stems),finely chopped
-                ingredients.add(new Ingredient("Cilantro", new BigDecimal(2), tableSpoonUom, guacRecipe));
+                guacRecipe.addIngredientBiDR(new Ingredient("Cilantro", new BigDecimal(2), tableSpoonUom));
 
                 // A dash of freshly grated black pepper
-                ingredients.add(new Ingredient("freshly grated black pepper", new BigDecimal(2), dashUom, guacRecipe));
+                guacRecipe.addIngredientBiDR(new Ingredient("freshly grated black pepper", new BigDecimal(2), dashUom));
 
                 //1 / 2 ripe tomato, seeds and pulp removed, chopped
-                ingredients.add(new Ingredient("ripe tomato, seeds and pulp removed, chopped", new BigDecimal(".5"), eachUom, guacRecipe));
-
-                guacRecipe.setIngredients(ingredients);
+                guacRecipe.addIngredientBiDR(new Ingredient("ripe tomato, seeds and pulp removed, chopped", new BigDecimal(".5"), eachUom));
             }
 
 
@@ -110,8 +109,6 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 
             {
                 Notes notes = new Notes();
-                //Long id;
-                notes.setRecipe(guacRecipe);
                 notes.setRecipeNotes("For a very quick guacamole just take a 1/4 cup of salsa and mix it in with your mashed avocados.\n" +
                         "Feel free to experiment! One classic Mexican guacamole has pomegranate seeds and chunks of peaches in it (a Diana Kennedy favorite). Try guacamole with added pineapple, mango, or strawberries.\n" +
                         "The simplest version of guacamole is just mashed avocados with salt. Don't let the lack of availability of other ingredients stop you from making guacamole.\n" +
@@ -120,9 +117,13 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
                         "\n" +
                         "Read more: http://www.simplyrecipes.com/recipes/perfect_guacamole/#ixzz4jvoun5ws");
 
-                guacRecipe.setNotes(notes);
+                /*
+                  Bi-Directional Relationship - addNotes
+                  notes.setRecipe(tacosRecipe);
+                  tacosRecipe.setNotes(notes);
+                 */
+                guacRecipe.addNotesBiDR(notes);
             }
-
 
             {
                 guacRecipe.getCategories().add(americanCategory);
@@ -192,8 +193,6 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 
             {
                 Notes notes = new Notes();
-                //Long id;
-                notes.setRecipe(tacosRecipe);
                 notes.setRecipeNotes("We have a family motto and it is this: Everything goes better in a tortilla.\n" +
                         "Any and every kind of leftover can go inside a warm tortilla, usually with a healthy dose of pickled jalapenos. I can always sniff out a late-night snacker when the aroma of tortillas heating in a hot pan on the stove comes wafting through the house.\n" +
                         "Today’s tacos are more purposeful – a deliberate meal instead of a secretive midnight snack!\n" +
@@ -203,7 +202,12 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
                         "\n" +
                         "Read more: http://www.simplyrecipes.com/recipes/spicy_grilled_chicken_tacos/#ixzz4jvu7Q0MJ");
 
-                tacosRecipe.setNotes(notes);
+                /*
+                  Bi-Directional Relationship - addNotes
+                  notes.setRecipe(tacosRecipe);
+                  tacosRecipe.setNotes(notes);
+                 */
+                tacosRecipe.addNotesBiDR(notes);
             }
 
 

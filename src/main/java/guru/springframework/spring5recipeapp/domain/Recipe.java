@@ -64,6 +64,21 @@ public class Recipe {
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories = new HashSet<>();
 
+    /*
+    For Bi-Directional Relationship Management
+     */
+    public Recipe addNotesBiDR(Notes notes) {
+        notes.setRecipe(this);
+        this.notes = notes;
+        return this;
+    }
+
+    public Recipe addIngredientBiDR(Ingredient ingredient) {
+        ingredient.setRecipe(this);
+        this.ingredients.add(ingredient);
+        return this;
+    }
+
 
     /*
     Getters and Setters
