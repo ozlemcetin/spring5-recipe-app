@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -28,8 +29,17 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 
 
     @Override
+    @Transactional
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         log.debug("RecipeBootstrap > Loading Bootstarp Data.");
+
+        /*
+        For Lazy Initialization Exception; In and out of Hibernate transaction,
+        lazy collections need to get initialized within a transaction and within the same Hibernate session.
+        Very easy way around is, @Transactional
+        Spring Framework, creates a transaction around this method.
+        Everything is going to happen in the same transactional context
+         */
         recipeRepository.saveAll(getRecipes());
     }
 
