@@ -41,7 +41,9 @@ public class IndexControllerTest {
 
     @Test
     public void testMockMVC() throws Exception {
+
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(indexController).build();
+
         mockMvc.perform(MockMvcRequestBuilders.get("/"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("index"));
@@ -51,9 +53,9 @@ public class IndexControllerTest {
     @Test
     public void getIndexPage() {
 
-
-        Set<Recipe> recipeSet = new HashSet<>();
         {
+            Set<Recipe> recipeSet = new HashSet<>();
+
             Recipe r1 = new Recipe();
             r1.setId(1L);
             recipeSet.add(r1);
@@ -61,11 +63,10 @@ public class IndexControllerTest {
             Recipe r2 = new Recipe();
             r2.setId(2L);
             recipeSet.add(r2);
+
+            when(recipeService.getRecipes()).thenReturn(recipeSet);
         }
 
-        when(recipeService.getRecipes()).thenReturn(recipeSet);
-
-        ArgumentCaptor<Set<Recipe>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
 
         String viewNameStr = "index";
         assertEquals(viewNameStr, indexController.getIndexPage(model));
@@ -73,10 +74,15 @@ public class IndexControllerTest {
       /*
         Verify that recipeService getRecipes() is called once and only once
        */
-        verify(recipeService, times(1)).getRecipes();
-        verify(model, times(1)).addAttribute(eq("recipes"), argumentCaptor.capture());
-        Set<Recipe> setInController = argumentCaptor.getValue();
-        assertEquals(2, setInController.size());
+        {
+            verify(recipeService, times(1)).getRecipes();
+
+            ArgumentCaptor<Set<Recipe>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
+            verify(model, times(1)).addAttribute(eq("recipes"), argumentCaptor.capture());
+
+            Set<Recipe> setInController = argumentCaptor.getValue();
+            assertEquals(2, setInController.size());
+        }
 
     }
 }
