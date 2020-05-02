@@ -12,7 +12,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.ui.Model;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -25,12 +24,6 @@ public class RecipeControllerTest {
 
     @Mock
     RecipeService recipeService;
-
-    @Mock
-    Model model;
-
-    @Mock
-    RecipeCommand recipeCommand;
 
     MockMvc mockMvc;
 
