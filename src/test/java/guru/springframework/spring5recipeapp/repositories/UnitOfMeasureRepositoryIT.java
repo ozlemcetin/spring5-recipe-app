@@ -10,7 +10,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 
 @RunWith(SpringRunner.class)
@@ -27,7 +28,16 @@ public class UnitOfMeasureRepositoryIT {
     @Test
     public void findByDescription() {
 
-        Optional<UnitOfMeasure> byDescription = unitOfMeasureRepository.findByDescription("Teaspoon");
-        assertEquals("Teaspoon", byDescription.get().getDescription());
+        String desc = "Teaspoon";
+        Optional<UnitOfMeasure> unitOfMeasure = unitOfMeasureRepository.findByDescription(desc);
+        assertEquals(desc, unitOfMeasure.get().getDescription());
+    }
+
+
+    @Test
+    public void count() {
+
+        long count = unitOfMeasureRepository.count();
+        assertNotEquals(0, count);
     }
 }

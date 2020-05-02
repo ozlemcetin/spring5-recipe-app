@@ -48,6 +48,17 @@ public class RecipeServiceImpl implements RecipeService {
         return recipeOptional.get();
     }
 
+    /*
+    @Transactional is used as we are doing a conversion outside the scope.
+     */
+    @Override
+    @Transactional
+    public RecipeCommand findCommandById(Long id) {
+
+        Recipe recipe = findById(id);
+        return toRecipeCommand.convert(recipe);
+    }
+
     @Override
     @Transactional
     public RecipeCommand saveRecipeCommand(RecipeCommand recipeCommand) {

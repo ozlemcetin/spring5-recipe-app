@@ -31,7 +31,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
     @Override
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        log.debug("RecipeBootstrap > Loading Bootstarp Data.");
+
 
         /*
         For Lazy Initialization Exception; In and out of Hibernate transaction,
@@ -40,6 +40,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         Spring Framework, creates a transaction around this method.
         Everything is going to happen in the same transactional context
          */
+        log.debug("RecipeBootstrap > Loading Bootstarp Data.");
         recipeRepository.saveAll(getRecipes());
     }
 

@@ -22,13 +22,14 @@ import static org.mockito.Mockito.*;
 
 public class IndexControllerTest {
 
+    IndexController indexController;
+
     @Mock
     RecipeService recipeService;
 
     @Mock
     Model model;
 
-    IndexController indexController;
 
     @Before
     public void setUp() throws Exception {
