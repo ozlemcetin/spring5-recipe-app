@@ -1,6 +1,8 @@
 package guru.springframework.spring5recipeapp.contollers;
 
+import guru.springframework.spring5recipeapp.commands.IngredientCommand;
 import guru.springframework.spring5recipeapp.commands.RecipeCommand;
+import guru.springframework.spring5recipeapp.services.IngredientService;
 import guru.springframework.spring5recipeapp.services.RecipeService;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,6 +24,9 @@ public class IngredientControllerTest {
     @Mock
     RecipeService recipeService;
 
+    @Mock
+    IngredientService ingredientService;
+
     MockMvc mockMvc;
 
     @Before
@@ -30,7 +35,7 @@ public class IngredientControllerTest {
         MockitoAnnotations.initMocks(this);
 
         //ingredientController
-        ingredientController = new IngredientController(recipeService);
+        ingredientController = new IngredientController(recipeService, ingredientService);
 
         //mockMvc
         mockMvc = MockMvcBuilders.standaloneSetup(ingredientController).build();
@@ -58,5 +63,30 @@ public class IngredientControllerTest {
             verify(recipeService).findCommandById(anyLong());
         }
 
+    }
+
+
+    @Test
+    public void showRecipeIngredient() throws Exception {
+
+        //when
+        Long recipeId = 1L;
+        Long ingredientId = 1L;
+        {
+            IngredientCommand ingredientCommand = new IngredientCommand();
+            ingredientCommand.setRecipeId(recipeId);
+            ingredientCommand.setId(ingredientId);
+            when(ingredientService.findCommandByRecipeIdIngredientId(anyLong(), anyLong())).thenReturn(ingredientCommand);
+        }
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/" + recipeId + "/ingredient/" + ingredientId + "/show"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("recipe/ingredient/show"))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("ingredientCommand"));
+
+        //verify
+        {
+            verify(ingredientService).findCommandByRecipeIdIngredientId(anyLong(), anyLong());
+        }
     }
 }

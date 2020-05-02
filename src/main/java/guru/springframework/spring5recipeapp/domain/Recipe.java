@@ -1,8 +1,6 @@
 package guru.springframework.spring5recipeapp.domain;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -71,24 +69,35 @@ public class Recipe {
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories = new HashSet<>();
 
-    /*
-    For Bi-Directional Relationship Management
-     */
-    public Recipe addNotesBiDR(Notes notes) {
-        notes.setRecipe(this);
-        this.notes = notes;
-        return this;
-    }
-
-    public Recipe addIngredientBiDR(Ingredient ingredient) {
-        ingredient.setRecipe(this);
-        this.ingredients.add(ingredient);
-        return this;
-    }
-
 
     /*
     Getters and Setters
      */
+
+
+    /*
+    For Bi-Directional Relationship Management
+     */
+
+    public void setNotes(Notes notes) {
+
+        this.notes = notes;
+
+        if (notes != null) {
+            notes.setRecipe(this);
+        }
+    }
+
+    public Recipe addIngredient(Ingredient ingredient) {
+
+        this.ingredients.add(ingredient);
+
+        if (ingredient != null) {
+            ingredient.setRecipe(this);
+        }
+
+        return this;
+    }
+
 
 }

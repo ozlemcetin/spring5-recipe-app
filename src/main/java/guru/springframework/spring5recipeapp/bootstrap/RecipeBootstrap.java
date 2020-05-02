@@ -92,28 +92,28 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
                  */
 
                 //2 ripe avocados
-                guacRecipe.addIngredientBiDR(new Ingredient("ripe avocados", new BigDecimal(2), eachUom));
+                guacRecipe.addIngredient(new Ingredient("ripe avocados", new BigDecimal(2), eachUom));
 
                 //1 / 4 teaspoon of salt, more to taste
-                guacRecipe.addIngredientBiDR(new Ingredient("Kosher salt", new BigDecimal(".5"), teaSpoonUom));
+                guacRecipe.addIngredient(new Ingredient("Kosher salt", new BigDecimal(".5"), teaSpoonUom));
 
                 // 1 tablespoon fresh lime juice or lemon juice
-                guacRecipe.addIngredientBiDR(new Ingredient("fresh lime juice or lemon juice", new BigDecimal(2), tableSpoonUom));
+                guacRecipe.addIngredient(new Ingredient("fresh lime juice or lemon juice", new BigDecimal(2), tableSpoonUom));
 
                 // 2 tablespoons to 1 / 4 cup of minced red onion or thinly sliced green onion
-                guacRecipe.addIngredientBiDR(new Ingredient("minced red onion or thinly sliced green onion", new BigDecimal(2), tableSpoonUom));
+                guacRecipe.addIngredient(new Ingredient("minced red onion or thinly sliced green onion", new BigDecimal(2), tableSpoonUom));
 
                 // 1 - 2 serrano chiles, stems and seeds removed, minced
-                guacRecipe.addIngredientBiDR(new Ingredient("serrano chiles, stems and seeds removed, minced", new BigDecimal(2), eachUom));
+                guacRecipe.addIngredient(new Ingredient("serrano chiles, stems and seeds removed, minced", new BigDecimal(2), eachUom));
 
                 // 2 tablespoons cilantro (leaves and tender stems),finely chopped
-                guacRecipe.addIngredientBiDR(new Ingredient("Cilantro", new BigDecimal(2), tableSpoonUom));
+                guacRecipe.addIngredient(new Ingredient("Cilantro", new BigDecimal(2), tableSpoonUom));
 
                 // A dash of freshly grated black pepper
-                guacRecipe.addIngredientBiDR(new Ingredient("freshly grated black pepper", new BigDecimal(2), dashUom));
+                guacRecipe.addIngredient(new Ingredient("freshly grated black pepper", new BigDecimal(2), dashUom));
 
                 //1 / 2 ripe tomato, seeds and pulp removed, chopped
-                guacRecipe.addIngredientBiDR(new Ingredient("ripe tomato, seeds and pulp removed, chopped", new BigDecimal(".5"), eachUom));
+                guacRecipe.addIngredient(new Ingredient("ripe tomato, seeds and pulp removed, chopped", new BigDecimal(".5"), eachUom));
             }
 
 
@@ -136,7 +136,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
                   notes.setRecipe(tacosRecipe);
                   tacosRecipe.setNotes(notes);
                  */
-                guacRecipe.addNotesBiDR(notes);
+                guacRecipe.setNotes(notes);
             }
 
             {
@@ -221,7 +221,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
                   notes.setRecipe(tacosRecipe);
                   tacosRecipe.setNotes(notes);
                  */
-                tacosRecipe.addNotesBiDR(notes);
+                tacosRecipe.setNotes(notes);
             }
 
 

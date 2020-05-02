@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 public class RecipeServiceImplTest {
 
 
-    RecipeServiceImpl recipeServiceImpl;
+    RecipeService recipeService;
 
     @Mock
     RecipeRepository recipeRepository;
@@ -39,7 +39,7 @@ public class RecipeServiceImplTest {
         Give me a mock RecipeRepository
          */
         MockitoAnnotations.initMocks(this);
-        recipeServiceImpl = new RecipeServiceImpl(recipeRepository, toRecipe, toRecipeCommand);
+        recipeService = new RecipeServiceImpl(recipeRepository, toRecipe, toRecipeCommand);
 
     }
 
@@ -58,8 +58,9 @@ public class RecipeServiceImplTest {
         }
 
         //Service
+        Set<Recipe> recipeSet = recipeService.getRecipes();
+
         int expectedSizeInt = 1;
-        Set<Recipe> recipeSet = recipeServiceImpl.getRecipes();
         assertEquals(expectedSizeInt, recipeSet.size());
 
         //Verification Steps
@@ -83,7 +84,7 @@ public class RecipeServiceImplTest {
         }
 
         //Service
-        Recipe recipe = recipeServiceImpl.findById(id);
+        Recipe recipe = recipeService.findById(id);
         assertNotNull(recipe);
         assertEquals(id, recipe.getId());
 
@@ -101,7 +102,7 @@ public class RecipeServiceImplTest {
 
         //Service
         Long id = 1L;
-        recipeServiceImpl.deleteById(id);
+        recipeService.deleteById(id);
 
         //Verify
         {
