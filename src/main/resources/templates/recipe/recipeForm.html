@@ -34,6 +34,7 @@
 
                 <input type="hidden" th:field="*{id}"/>
 
+                <!--pannel-group-->
                 <div class="pannel-group">
 
                     <!--panel panel-primary-->
@@ -126,7 +127,9 @@
                                     <h1 class="panel-title">Ingredients</h1>
                                 </div>
                                 <div class="col-md-1">
-                                    <a class="btn btn-default" href="#" role="button">Edit</a>
+                                    <a class="btn btn-default" href="#"
+                                       th:href="@{'/recipe/' + ${recipeCommand.id} + '/ingredients'}"
+                                       role="button">Edit</a>
                                 </div>
                             </div>
                         </div>
@@ -176,16 +179,20 @@
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-md-12 form-group">
-                                    <textarea class="form-control" rows="3" th:field="*{notesCommand.recipeNotes}"></textarea>
+                                    <textarea class="form-control" rows="3"
+                                              th:field="*{notesCommand.recipeNotes}"></textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!--panel panel-primary-->
 
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
 
                 </div>
+                <!--pannel-group-->
             </form>
 
         </div>

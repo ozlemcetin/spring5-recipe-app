@@ -42,13 +42,16 @@ public class RecipeControllerTest {
     @Test
     public void testMockMvc_showById() throws Exception {
 
-        //when
+        //given
+        Long recipeId = 1L;
         {
             Recipe recipe = new Recipe();
+            recipe.setId(recipeId);
             when(recipeService.findById(anyLong())).thenReturn(recipe);
         }
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1/show"))
+        //when
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/" + recipeId + "/show"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("recipe/show"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("recipe"));
@@ -62,6 +65,7 @@ public class RecipeControllerTest {
     @Test
     public void testMockMvc_newRecipe() throws Exception {
 
+        //when
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/new"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("recipe/recipeForm"))
@@ -72,13 +76,16 @@ public class RecipeControllerTest {
     @Test
     public void testMockMvc_updateRecipe() throws Exception {
 
-        //when
+        //given
+        Long recipeId = 1L;
         {
             RecipeCommand recipeCommand = new RecipeCommand();
+            recipeCommand.setId(recipeId);
             when(recipeService.findCommandById(anyLong())).thenReturn(recipeCommand);
         }
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1/update"))
+        //when
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/" + recipeId + "/update"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("recipe/recipeForm"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("recipeCommand"));
@@ -92,15 +99,15 @@ public class RecipeControllerTest {
     @Test
     public void testMockMvc_saveOrUpdate() throws Exception {
 
-        //when
+        //given
         Long id = 1L;
         {
             RecipeCommand recipeCommand = new RecipeCommand();
             recipeCommand.setId(id);
-
             when(recipeService.saveRecipeCommand(any())).thenReturn(recipeCommand);
         }
 
+        //when
         mockMvc.perform(MockMvcRequestBuilders.post("/recipe")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("id", "")
@@ -118,6 +125,7 @@ public class RecipeControllerTest {
     @Test
     public void testMockMvc_deleteRecipe() throws Exception {
 
+        //when
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1/delete"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
                 .andExpect(MockMvcResultMatchers.view().name("redirect:/"));

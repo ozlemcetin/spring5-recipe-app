@@ -60,6 +60,7 @@ public class RecipeServiceImplTest {
         //Service
         Set<Recipe> recipeSet = recipeService.getRecipes();
 
+        //Then
         int expectedSizeInt = 1;
         assertEquals(expectedSizeInt, recipeSet.size());
 
