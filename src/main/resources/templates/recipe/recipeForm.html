@@ -89,10 +89,15 @@
 
                                 <div class="col-md-3 form-group">
                                     <label>Difficulty:</label>
-                                    <select class="form-control">
-                                        <option>Easy</option>
-                                        <option>Medium</option>
-                                        <option>Hard</option>
+                                    <select class="form-control" th:field="*{difficulty}">
+                                        <option th:remove="all">Option 1</option>
+                                        <option th:remove="all">Option 1</option>
+                                        <option th:each="difficultyValue : ${T(guru.springframework.spring5recipeapp.domain.Difficulty).values()}"
+                                                th:value="${difficultyValue.name()}"
+                                                th:text="${difficultyValue.name()}"
+                                                th:selected="${difficultyValue.name().equals(recipeCommand.difficulty)}">
+                                            Option 3
+                                        </option>
                                     </select>
                                 </div>
                             </div>
