@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @Slf4j
@@ -84,20 +85,22 @@ public class IngredientServiceImpl implements IngredientService {
                     .filter(ingredient -> ingredient.getId().equals(ingredientId))
                     .findFirst();
 
+            String icDescription = ingredientCommand.getDescription();
+            BigDecimal icAmount = ingredientCommand.getAmount();
+            Long icUOMId = ingredientCommand.getUnitOfMeasureCommand().getId();
+
             if (optionalIngredient.isPresent()) {
 
                 //Update
                 Ingredient ingredient = optionalIngredient.get();
 
-                ingredient.setDescription(ingredientCommand.getDescription());
-                ingredient.setAmount(ingredientCommand.getAmount());
-
-                Long uomId = ingredientCommand.getUnitOfMeasureCommand().getId();
+                ingredient.setDescription(icDescription);
+                ingredient.setAmount(icAmount);
 
                 //todo impl error handling
                 UnitOfMeasure unitOfMeasure =
-                        unitOfMeasureRepository.findById(uomId)
-                                .orElseThrow(() -> new RuntimeException("UnitOfMeasure Not Found! Id :" + uomId));
+                        unitOfMeasureRepository.findById(icUOMId)
+                                .orElseThrow(() -> new RuntimeException("UnitOfMeasure Not Found! Id :" + icUOMId));
 
                 ingredient.setUom(unitOfMeasure);
 
@@ -114,12 +117,17 @@ public class IngredientServiceImpl implements IngredientService {
 
             Optional<Ingredient> savedOptionalIngredient
                     = savedRecipe.getIngredients().stream()
-                    .filter(ingredient -> ingredient.getId().equals(ingredientId))
+                    .filter(recipeIngredients -> recipeIngredients.getId().equals(ingredientId))
                     .findFirst();
 
             if (!savedOptionalIngredient.isPresent()) {
-                //todo impl error handling
-                log.error("Ingredient id not found: " + ingredientId);
+                //Brand new ingredient doesnt have an id value
+                savedOptionalIngredient
+                        = savedRecipe.getIngredients().stream()
+                        .filter(ingredient -> ingredient.getDescription().equals(icDescription))
+                        .filter(ingredient -> ingredient.getAmount().equals(icAmount))
+                        .filter(ingredient -> ingredient.getUom().getId().equals(icUOMId))
+                        .findFirst();
             }
 
             return toIngredientCommand.convert(savedOptionalIngredient.get());

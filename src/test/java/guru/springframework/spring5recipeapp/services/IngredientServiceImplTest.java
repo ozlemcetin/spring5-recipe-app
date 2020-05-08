@@ -1,12 +1,14 @@
 package guru.springframework.spring5recipeapp.services;
 
 import guru.springframework.spring5recipeapp.commands.IngredientCommand;
+import guru.springframework.spring5recipeapp.commands.UnitOfMeasureCommand;
 import guru.springframework.spring5recipeapp.converters.IngredientCommandToIngredient;
 import guru.springframework.spring5recipeapp.converters.IngredientToIngredientCommand;
 import guru.springframework.spring5recipeapp.converters.UnitOfMeasureCommandToUnitOfMeasure;
 import guru.springframework.spring5recipeapp.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import guru.springframework.spring5recipeapp.domain.Ingredient;
 import guru.springframework.spring5recipeapp.domain.Recipe;
+import guru.springframework.spring5recipeapp.domain.UnitOfMeasure;
 import guru.springframework.spring5recipeapp.repositories.RecipeRepository;
 import guru.springframework.spring5recipeapp.repositories.UnitOfMeasureRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -96,7 +99,10 @@ class IngredientServiceImplTest {
 
         //Given
         Long recipeId = 1L;
-        Long ingredientId = 1L;
+        Long ingredientId = 2L;
+        Long uomId = 3L;
+        String ingredientDesc = "Ingredient Description";
+        BigDecimal ingredientAmount = new BigDecimal(5);
         {
             Recipe recipe = new Recipe();
             recipe.setId(recipeId);
@@ -110,6 +116,14 @@ class IngredientServiceImplTest {
             {
                 Ingredient ingredient = new Ingredient();
                 ingredient.setId(ingredientId);
+
+                ingredient.setDescription(ingredientDesc);
+                ingredient.setAmount(ingredientAmount);
+
+                UnitOfMeasure unitOfMeasure = new UnitOfMeasure();
+                unitOfMeasure.setId(uomId);
+                ingredient.setUom(unitOfMeasure);
+
                 recipe.addIngredient(ingredient);
             }
 
@@ -118,7 +132,17 @@ class IngredientServiceImplTest {
 
         IngredientCommand ingredientCommand = new IngredientCommand();
         ingredientCommand.setRecipeId(recipeId);
-        ingredientCommand.setId(ingredientId);
+
+        //Brand new ingredient doesnt have an id value
+        //ingredientCommand.setId(ingredientId);
+
+        ingredientCommand.setDescription(ingredientDesc);
+        ingredientCommand.setAmount(ingredientAmount);
+
+        UnitOfMeasureCommand unitOfMeasureCommand = new UnitOfMeasureCommand();
+        unitOfMeasureCommand.setId(uomId);
+        ingredientCommand.setUnitOfMeasureCommand(unitOfMeasureCommand);
+
 
         //When Service
         IngredientCommand savedIngredientCommand
@@ -126,8 +150,11 @@ class IngredientServiceImplTest {
 
         //Then
         assertNotNull(savedIngredientCommand);
-        assertEquals(ingredientCommand.getId(), savedIngredientCommand.getId());
         assertEquals(ingredientCommand.getRecipeId(), ingredientCommand.getRecipeId());
+        assertEquals(ingredientId, savedIngredientCommand.getId());
+        assertEquals(ingredientDesc, savedIngredientCommand.getDescription());
+        assertEquals(ingredientAmount, savedIngredientCommand.getAmount());
+        assertEquals(uomId, savedIngredientCommand.getUnitOfMeasureCommand().getId());
 
         //Verify
         {

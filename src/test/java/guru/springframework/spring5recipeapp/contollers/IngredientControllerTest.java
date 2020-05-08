@@ -103,11 +103,42 @@ public class IngredientControllerTest {
     }
 
     @Test
+    public void newIngredient() throws Exception {
+
+        //given
+        Long recipeId = 1L;
+        //Long ingredientId = 2L;
+        {
+            RecipeCommand recipeCommand = new RecipeCommand();
+            recipeCommand.setId(recipeId);
+            when(recipeService.findCommandById(anyLong())).thenReturn(recipeCommand);
+        }
+        {
+            Set<UnitOfMeasureCommand> unitOfMeasureCommands = new HashSet<>();
+            when(unitOfMeasureService.listAllUnitOfMeasureCommands()).thenReturn(unitOfMeasureCommands);
+        }
+
+        //when
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/" + recipeId + "/ingredient/new"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("recipe/ingredient/ingredientForm"))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("ingredientCommand"))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("unitOfMeasureCommands"));
+
+        //verify
+        {
+            verify(recipeService).findCommandById(anyLong());
+            verify(unitOfMeasureService).listAllUnitOfMeasureCommands();
+        }
+
+    }
+
+    @Test
     public void updateRecipeIngredient() throws Exception {
 
         //given
         Long recipeId = 1L;
-        Long ingredientId = 1L;
+        Long ingredientId = 2L;
         {
             IngredientCommand ingredientCommand = new IngredientCommand();
             ingredientCommand.setRecipeId(recipeId);
