@@ -190,6 +190,24 @@ public class IngredientControllerTest {
         {
             verify(ingredientService).saveIngredientCommand(any());
         }
+    }
 
+
+    @Test
+    public void deleteRecipeIngredient() throws Exception {
+
+        //given
+        Long recipeId = 1L;
+        Long ingredientId = 2L;
+
+        //when
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/" + recipeId + "/ingredient/" + ingredientId + "/delete"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.view().name("redirect:/recipe/" + recipeId + "/ingredients"));
+
+        //verify
+        {
+            verify(ingredientService).deleteByRecipeIdIngredientId(anyLong(), anyLong());
+        }
     }
 }

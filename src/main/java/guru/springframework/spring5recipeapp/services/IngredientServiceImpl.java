@@ -24,7 +24,9 @@ public class IngredientServiceImpl implements IngredientService {
     private final IngredientToIngredientCommand toIngredientCommand;
     private final IngredientCommandToIngredient toIngredient;
 
-    public IngredientServiceImpl(RecipeRepository recipeRepository, UnitOfMeasureRepository unitOfMeasureRepository, IngredientToIngredientCommand toIngredientCommand, IngredientCommandToIngredient toIngredient) {
+    public IngredientServiceImpl(RecipeRepository recipeRepository, UnitOfMeasureRepository unitOfMeasureRepository,
+                                 IngredientToIngredientCommand toIngredientCommand, IngredientCommandToIngredient toIngredient) {
+
         this.recipeRepository = recipeRepository;
         this.unitOfMeasureRepository = unitOfMeasureRepository;
         this.toIngredientCommand = toIngredientCommand;
@@ -134,5 +136,36 @@ public class IngredientServiceImpl implements IngredientService {
 
         }
 
+    }
+
+    @Override
+    public Recipe deleteByRecipeIdIngredientId(Long recipeId, Long ingredientId) {
+
+        //Check the values are correct
+        Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
+
+        if (!recipeOptional.isPresent()) {
+            //todo impl error handling
+            log.error("recipe id not found. Id: " + recipeId);
+        }
+
+        Recipe recipe = recipeOptional.get();
+
+        Optional<Ingredient> optionalIngredient
+                = recipe.getIngredients().stream()
+                .filter(ingredient -> ingredient.getId().equals(ingredientId))
+                .findFirst();
+
+        Recipe savedRecipe = null;
+        if (optionalIngredient.isPresent()) {
+            Ingredient ingredient = optionalIngredient.get();
+            recipe.getIngredients().remove(ingredient);
+            ingredient.setRecipe(null);
+
+            //Save
+            savedRecipe = recipeRepository.save(recipe);
+        }
+
+        return savedRecipe;
     }
 }

@@ -54,7 +54,8 @@ class IngredientServiceImplTest {
     void setUp() {
 
         MockitoAnnotations.initMocks(this);
-        ingredientService = new IngredientServiceImpl(recipeRepository, unitOfMeasureRepository, toIngredientCommand, toIngredient);
+        ingredientService = new IngredientServiceImpl(recipeRepository, unitOfMeasureRepository,
+                toIngredientCommand, toIngredient);
     }
 
     @Test
@@ -161,8 +162,48 @@ class IngredientServiceImplTest {
             verify(recipeRepository).findById(anyLong());
             verify(recipeRepository).save(any(Recipe.class));
         }
-
     }
 
+    @Test
+    void deleteByRecipeIdIngredientId() {
+
+        //Given
+        Long recipeId = 1L;
+        Long ingredientId = 2L;
+
+        {
+            Recipe recipe = new Recipe();
+            recipe.setId(recipeId);
+
+            {
+                Ingredient ingredient = new Ingredient();
+                ingredient.setId(ingredientId);
+                recipe.addIngredient(ingredient);
+            }
+
+            when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
+        }
+
+        {
+
+            Recipe recipe = new Recipe();
+            recipe.setId(recipeId);
+
+            when(recipeRepository.save(any(Recipe.class))).thenReturn(recipe);
+        }
+
+        //When service
+        Recipe recipe = ingredientService.deleteByRecipeIdIngredientId(recipeId, ingredientId);
+
+        //Then
+        assertNotNull(recipe);
+        assertEquals(0, recipe.getIngredients().size());
+
+        //Verify
+        {
+            verify(recipeRepository).findById(anyLong());
+            verify(recipeRepository).save(any(Recipe.class));
+        }
+    }
 
 }

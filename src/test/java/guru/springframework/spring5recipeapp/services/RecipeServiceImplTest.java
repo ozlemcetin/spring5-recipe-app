@@ -99,13 +99,13 @@ public class RecipeServiceImplTest {
     @Test
     public void deleteById() {
 
-        //no when since method has a void return type
-
-        //Service
+        //no given since method has a void return type
         Long id = 1L;
+
+        //when service
         recipeService.deleteById(id);
 
-        //Verify
+        //verify
         {
             verify(recipeRepository, times(1)).deleteById(anyLong());
         }

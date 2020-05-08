@@ -3,6 +3,8 @@ package guru.springframework.spring5recipeapp.services;
 import guru.springframework.spring5recipeapp.commands.IngredientCommand;
 import guru.springframework.spring5recipeapp.commands.UnitOfMeasureCommand;
 import guru.springframework.spring5recipeapp.converters.UnitOfMeasureToUnitOfMeasureCommand;
+import guru.springframework.spring5recipeapp.domain.Ingredient;
+import guru.springframework.spring5recipeapp.domain.Recipe;
 import guru.springframework.spring5recipeapp.domain.UnitOfMeasure;
 import guru.springframework.spring5recipeapp.repositories.UnitOfMeasureRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,11 +28,18 @@ class IngredientServiceIT {
     @Autowired
     IngredientService ingredientService;
 
+    // RecipeRepository recipeRepository;
+
     @Autowired
     UnitOfMeasureRepository unitOfMeasureRepository;
 
+
+    //IngredientToIngredientCommand toIngredientCommand;
+    //IngredientCommandToIngredient toIngredient;
+
     @Autowired
     UnitOfMeasureToUnitOfMeasureCommand toUnitOfMeasureCommand;
+
 
     @BeforeEach
     void setUp() {
@@ -42,7 +51,7 @@ class IngredientServiceIT {
 
         //Given
         Long recipeId = 1L;
-        Long ingredientId = 1L;
+        Long ingredientId = 2L;
 
         //When Service
         IngredientCommand ingredientCommand = ingredientService.findCommandByRecipeIdIngredientId(recipeId, ingredientId);
@@ -100,7 +109,7 @@ class IngredientServiceIT {
 
         //Given
         Long recipeId = 1L;
-        Long ingredientId = 1L;
+        Long ingredientId = 2L;
         String description = "New Ingredient Description";
         BigDecimal amount = new BigDecimal(5);
         Long uomId = 1L;
@@ -136,5 +145,29 @@ class IngredientServiceIT {
         assertEquals(uomId, ingredientCommand.getUnitOfMeasureCommand().getId());
     }
 
+    @Test
+    @Transactional
+    void deleteByRecipeIdIngredientId() {
+
+        //Given
+        Long recipeId = 1L;
+        Long ingredientId = 2L;
+
+        //When Service
+        Recipe recipe = ingredientService.deleteByRecipeIdIngredientId(recipeId, ingredientId);
+
+        //Then
+        assertNotNull(recipe);
+
+        //Then
+
+        Optional<Ingredient> optionalIngredient
+                = recipe.getIngredients().stream()
+                .filter(ingredient -> ingredient.getId().equals(ingredientId))
+                .findFirst();
+
+        assertEquals(false, optionalIngredient.isPresent());
+
+    }
 
 }
