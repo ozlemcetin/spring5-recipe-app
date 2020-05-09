@@ -41,7 +41,17 @@
                     <div class="panel panel-primary">
 
                         <div class="panel-heading">
-                            <h1 class="panel-title">Edit Recipe Information</h1>
+                            <div class="row">
+                                <div class="col-md-11">
+                                    <h1 class="panel-title" th:text="${recipeCommand.description}">Recipe Description</h1>
+                                </div>
+                                <div class="col-md-1">
+                                    <a class="btn btn-default" href="#"
+                                       th:href="@{'/recipe/' + ${recipeCommand.id} + '/image'}"
+                                       role="button">Change Image</a>
+                                </div>
+                            </div>
+
                         </div>
 
                         <div class="panel-body">
@@ -59,7 +69,7 @@
                                     <label>Categories:</label>
                                 </div>
 
-                                <div class="col-md-9 form-group">
+                                <div class="col-md-3 form-group">
                                     <div class="radio" th:remove="all">
                                         <label>
                                             <input type="checkbox" value=""/>
@@ -72,6 +82,13 @@
                                             Category 2
                                         </label>
                                     </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <img src="../../static/images/guacamole400x400WithX.jpg"
+                                         th:src="@{/images/guacamole400x400WithX.jpg}"
+                                         width="200"
+                                         height="200">
                                 </div>
                             </div>
 
