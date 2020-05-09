@@ -48,6 +48,9 @@ public class RecipeCommandToRecipe implements Converter<RecipeCommand, Recipe> {
                         .forEach(ingredientCommand -> recipe.getIngredients().add(ingredientConverter.convert(ingredientCommand)));
             }
 
+            //Image is right now is one-way; only toRecipeCommand available
+            //recipe.setImage(source.getImage());
+
             recipe.setDifficulty(source.getDifficulty());
 
             //converter
