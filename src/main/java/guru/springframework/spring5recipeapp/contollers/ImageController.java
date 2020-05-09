@@ -1,7 +1,6 @@
 package guru.springframework.spring5recipeapp.contollers;
 
 import guru.springframework.spring5recipeapp.commands.RecipeCommand;
-import guru.springframework.spring5recipeapp.domain.Recipe;
 import guru.springframework.spring5recipeapp.services.ImageService;
 import guru.springframework.spring5recipeapp.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
@@ -39,9 +38,6 @@ public class ImageController {
     @PostMapping("/recipe/{recipeId}/image")
     public String handleImageUploadFormPost(@PathVariable String recipeId,
                                             @RequestParam("imageFileUpload") MultipartFile file) {
-
-        //Find the recipe
-        Recipe recipe = recipeService.findById(Long.valueOf(recipeId));
 
         //Save Image
         imageService.saveImageFile(Long.valueOf(recipeId), file);

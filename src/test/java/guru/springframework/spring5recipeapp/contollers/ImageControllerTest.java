@@ -1,7 +1,6 @@
 package guru.springframework.spring5recipeapp.contollers;
 
 import guru.springframework.spring5recipeapp.commands.RecipeCommand;
-import guru.springframework.spring5recipeapp.domain.Recipe;
 import guru.springframework.spring5recipeapp.services.ImageService;
 import guru.springframework.spring5recipeapp.services.RecipeService;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,6 +28,7 @@ class ImageControllerTest {
 
     @Mock
     ImageService imageService;
+
 
     MockMvc mockMvc;
 
@@ -72,11 +72,6 @@ class ImageControllerTest {
 
         //given
         Long recipeId = 1L;
-        {
-            Recipe recipe = new Recipe();
-            recipe.setId(recipeId);
-            when(recipeService.findById(anyLong())).thenReturn(recipe);
-        }
 
         /*
         String name, @Nullable String originalFilename, @Nullable String contentType, @Nullable byte[] content
@@ -92,9 +87,8 @@ class ImageControllerTest {
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
                 .andExpect(MockMvcResultMatchers.header().string("Location", "/recipe/" + recipeId + "/show"));
 
-
+        //verify
         {
-            verify(recipeService).findById(anyLong());
             verify(imageService).saveImageFile(any(), any());
         }
 
