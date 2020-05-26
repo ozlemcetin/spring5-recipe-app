@@ -153,7 +153,8 @@ public class RecipeControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/recipe")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("id", "")
-                .param("description", "new description"))
+                .param("description", "new description")
+                .param("directions", "new directions"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
                 .andExpect(MockMvcResultMatchers.view().name("redirect:/recipe/" + id + "/show"));
 
@@ -161,6 +162,24 @@ public class RecipeControllerTest {
         {
             verify(recipeService).saveRecipeCommand(any());
         }
+
+    }
+
+
+    @Test
+    public void saveOrUpdateFormValidationFail() throws Exception {
+
+        /*
+        bindingResult.hasErrors()
+         */
+
+        //when
+        mockMvc.perform(MockMvcRequestBuilders.post("/recipe")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("description", ""))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name(RecipeController.VIEWS_RECIPE_RECIPE_FORM_URL))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("recipeCommand"));
 
     }
 
