@@ -2,6 +2,7 @@ package guru.springframework.spring5recipeapp.contollers;
 
 import guru.springframework.spring5recipeapp.commands.RecipeCommand;
 import guru.springframework.spring5recipeapp.domain.Recipe;
+import guru.springframework.spring5recipeapp.exceptions.NotFoundException;
 import guru.springframework.spring5recipeapp.services.RecipeService;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +41,7 @@ public class RecipeControllerTest {
     }
 
     @Test
-    public void testMockMvc_showById() throws Exception {
+    public void showById() throws Exception {
 
         //given
         Long recipeId = 1L;
@@ -63,7 +64,28 @@ public class RecipeControllerTest {
     }
 
     @Test
-    public void testMockMvc_newRecipe() throws Exception {
+    public void showByIdNotFound() throws Exception {
+
+        //given
+        Long recipeId = 1L;
+        {
+            when(recipeService.findById(anyLong())).thenThrow(NotFoundException.class);
+        }
+
+        //when
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/" + recipeId + "/show"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.view().name("404NotFoundError"));
+
+        //verify
+        {
+            verify(recipeService).findById(anyLong());
+        }
+
+    }
+
+    @Test
+    public void newRecipe() throws Exception {
 
         //when
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/new"))
@@ -74,7 +96,7 @@ public class RecipeControllerTest {
     }
 
     @Test
-    public void testMockMvc_updateRecipe() throws Exception {
+    public void updateRecipe() throws Exception {
 
         //given
         Long recipeId = 1L;
@@ -97,7 +119,7 @@ public class RecipeControllerTest {
     }
 
     @Test
-    public void testMockMvc_saveOrUpdate() throws Exception {
+    public void saveOrUpdate() throws Exception {
 
         //given
         Long id = 1L;
@@ -123,7 +145,7 @@ public class RecipeControllerTest {
     }
 
     @Test
-    public void testMockMvc_deleteRecipe() throws Exception {
+    public void deleteRecipe() throws Exception {
 
         //when
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1/delete"))
