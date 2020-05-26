@@ -75,12 +75,29 @@ public class RecipeControllerTest {
         //when
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/" + recipeId + "/show"))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
-                .andExpect(MockMvcResultMatchers.view().name("404NotFoundError"));
+                .andExpect(MockMvcResultMatchers.view().name("error"))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("title"))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("exception"));
 
         //verify
         {
             verify(recipeService).findById(anyLong());
         }
+
+    }
+
+    @Test
+    public void showByIdBadRequest() throws Exception {
+
+        //given
+        String recipeId = "asfd";
+
+        //when
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/" + recipeId + "/show"))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.view().name("error"))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("title"))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("exception"));
 
     }
 
