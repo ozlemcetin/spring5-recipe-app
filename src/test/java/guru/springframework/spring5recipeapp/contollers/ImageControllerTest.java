@@ -43,7 +43,10 @@ class ImageControllerTest {
         imageController = new ImageController(recipeService, imageService);
 
         //mockMvc
-        mockMvc = MockMvcBuilders.standaloneSetup(imageController).build();
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(imageController)
+                .setControllerAdvice(new ExceptionHandlerControllerAdvice())
+                .build();
     }
 
     @Test
@@ -134,6 +137,21 @@ class ImageControllerTest {
         {
             verify(recipeService).findCommandById(anyLong());
         }
+
+    }
+
+    @Test
+    public void renderImageFromDBBadRequest() throws Exception {
+
+        //given
+        String recipeId = "asfd";
+
+        //when
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/" + recipeId + "/image/show"))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.view().name("error"))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("title"))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("exception"));
 
     }
 
