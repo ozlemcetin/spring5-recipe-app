@@ -176,7 +176,8 @@ public class RecipeControllerTest {
         //when
         mockMvc.perform(MockMvcRequestBuilders.post("/recipe")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("description", ""))
+                .param("description", "")
+                .param("cookTime", "9999"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name(RecipeController.VIEWS_RECIPE_RECIPE_FORM_URL))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("recipeCommand"));
