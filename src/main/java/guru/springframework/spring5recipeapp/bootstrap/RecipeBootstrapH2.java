@@ -6,6 +6,7 @@ import guru.springframework.spring5recipeapp.repositories.RecipeRepository;
 import guru.springframework.spring5recipeapp.repositories.UnitOfMeasureRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
@@ -15,13 +16,14 @@ import java.util.*;
 
 @Slf4j
 @Component
-public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEvent> {
+@Profile("default")
+public class RecipeBootstrapH2 implements ApplicationListener<ContextRefreshedEvent> {
 
     private final RecipeRepository recipeRepository;
     private final CategoryRepository categoryRepository;
     private final UnitOfMeasureRepository unitOfMeasureRepository;
 
-    public RecipeBootstrap(RecipeRepository recipeRepository, CategoryRepository categoryRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
+    public RecipeBootstrapH2(RecipeRepository recipeRepository, CategoryRepository categoryRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
         this.recipeRepository = recipeRepository;
         this.categoryRepository = categoryRepository;
         this.unitOfMeasureRepository = unitOfMeasureRepository;
@@ -40,7 +42,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         Spring Framework, creates a transaction around this method.
         Everything is going to happen in the same transactional context
          */
-        log.debug("RecipeBootstrap > Loading Bootstarp Data.");
+        log.debug("RecipeBootstrapH2 > Loading Bootstarp Data.");
         recipeRepository.saveAll(getRecipes());
     }
 
