@@ -36,18 +36,18 @@ public class Ingredient {
         This is just an example to show how to explicitly set a Fetch Type
      */
     @OneToOne(fetch = FetchType.EAGER)
-    private UnitOfMeasure unit;
+    private UnitOfMeasure unitOfMeasure;
 
     /*
     ===
      */
 
-    public UnitOfMeasure getUnit() {
-        return unit;
+    public UnitOfMeasure getUnitOfMeasure() {
+        return unitOfMeasure;
     }
 
-    public void setUnit(UnitOfMeasure unit) {
-        this.unit = unit;
+    public void setUnitOfMeasure(UnitOfMeasure unitOfMeasure) {
+        this.unitOfMeasure = unitOfMeasure;
     }
 
     public Long getId() {

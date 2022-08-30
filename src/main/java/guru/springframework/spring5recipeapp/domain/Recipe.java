@@ -47,6 +47,13 @@ public class Recipe {
     ===
      */
 
+    /*
+      Recipe owns the Notes.
+      When a recipe is deleted, notes are also deleted.
+   */
+    @OneToOne(cascade = CascadeType.ALL)
+    private Notes notes;
+
      /*
         @OneToMany Relationship;
         The Recipe will have many Ingredients
@@ -62,16 +69,16 @@ public class Recipe {
      */
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
-    private Set<Ingredient> ingredientSet = new HashSet<>();
+    private Set<Ingredient> ingredients = new HashSet<>();
 
     /*
-        Recipe owns the Notes.
-        When a recipe is deleted, notes are also deleted.
+        For @ManyToMany Relationships specify a common JOIN TABLE with @JoinTable.
+        On the other side, we need to tell it   @ManyToMany(mappedBy = "categories")
      */
-    @OneToOne(cascade = CascadeType.ALL)
-    private Notes notes;
 
-
+    @ManyToMany
+    @JoinTable(name = "recipe_category", joinColumns = @JoinColumn(name = "recipe_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<Category> categories = new HashSet<>();
     /*
     ===
      */
@@ -156,12 +163,12 @@ public class Recipe {
         this.image = image;
     }
 
-    public Set<Ingredient> getIngredientSet() {
-        return ingredientSet;
+    public Set<Ingredient> getIngredients() {
+        return ingredients;
     }
 
-    public void setIngredientSet(Set<Ingredient> ingredientSet) {
-        this.ingredientSet = ingredientSet;
+    public void setIngredients(Set<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 
     public Notes getNotes() {
@@ -170,5 +177,13 @@ public class Recipe {
 
     public void setNotes(Notes notes) {
         this.notes = notes;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
     }
 }
