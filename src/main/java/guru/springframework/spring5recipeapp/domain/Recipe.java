@@ -19,8 +19,23 @@ public class Recipe {
     private String url;
     private String directions;
 
-    //todo
-    //private Difficulty difficulty;
+    /*
+
+        //EASY, MODERATE, HARD
+
+        @Enumerated(value = EnumType.ORDINAL)
+        @Enumerated(value = EnumType.STRING)
+        Defines how it gets persisted in the database.
+        ORDINAL is the default; it will get persisted as 1, 2, and 3.
+
+        If we are to add a new enum,
+        //EASY, MODERATE, HARD_ISH, HARD
+        The value of HARD just changes from 3 to 4.
+
+        Chose to use the string value, because the enums ordinal positions may get changed
+     */
+    @Enumerated(value = EnumType.STRING)
+    private Difficulty difficulty;
 
     /*
          @Lob, JPA will expect to store it in a BLOB field in the database
@@ -125,12 +140,28 @@ public class Recipe {
         this.directions = directions;
     }
 
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
+
     public Byte[] getImage() {
         return image;
     }
 
     public void setImage(Byte[] image) {
         this.image = image;
+    }
+
+    public Set<Ingredient> getIngredientSet() {
+        return ingredientSet;
+    }
+
+    public void setIngredientSet(Set<Ingredient> ingredientSet) {
+        this.ingredientSet = ingredientSet;
     }
 
     public Notes getNotes() {
