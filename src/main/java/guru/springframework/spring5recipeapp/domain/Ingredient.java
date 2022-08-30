@@ -13,8 +13,6 @@ public class Ingredient {
     private String description;
     private BigDecimal amount;
 
-    //todo
-    //private UnitOfMeasure uom;
 
     /*
     ===
@@ -24,13 +22,33 @@ public class Ingredient {
         We don't do any cascading here.
         If we delete an ingredient we don't want to cascade the delete operation to the recipe
      */
-
     @ManyToOne
     private Recipe recipe;
 
     /*
+        We don't need a bidirectional relationship.
+        This is a unidirectional relationship from Ingredient to UnitOfMeasure.
+        We DO NOT cascade persistence events form Ingredient to UnitOfMeasure.
+     */
+
+    /*
+        @OneToOne is by default is EAGER.
+        This is just an example to show how to explicitly set a Fetch Type
+     */
+    @OneToOne(fetch = FetchType.EAGER)
+    private UnitOfMeasure unit;
+
+    /*
     ===
      */
+
+    public UnitOfMeasure getUnit() {
+        return unit;
+    }
+
+    public void setUnit(UnitOfMeasure unit) {
+        this.unit = unit;
+    }
 
     public Long getId() {
         return id;
