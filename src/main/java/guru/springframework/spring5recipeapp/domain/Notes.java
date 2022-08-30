@@ -23,14 +23,17 @@ public class Notes {
     private String recipeNotes;
 
     /*
-       Notes doesn't own the Notes.
-       When a notes is deleted, a recipe  will remain inside the database
+    ===
+     */
+
+    /*
+       Notes doesn't own the Recipe.
+       When a notes is deleted, a recipe  will remain inside the database.
        We don't have cascade operations happening here.
     */
 
     @OneToOne
     private Recipe recipe;
-
 
     /*
     ===

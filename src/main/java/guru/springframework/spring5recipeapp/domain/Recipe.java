@@ -1,6 +1,8 @@
 package guru.springframework.spring5recipeapp.domain;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Recipe {
@@ -27,12 +29,32 @@ public class Recipe {
     private Byte[] image;
 
     /*
+    ===
+     */
+
+     /*
+        @OneToMany Relationship;
+        The Recipe will have many Ingredients
+        while an Ingredient will have just one Recipe.
+     */
+
+    /*
+       Recipe owns the Ingredient.
+       For mappedBy, use the target property on the child class.
+       This Recipe will get stored on the child object
+       The Ingredient has a property called recipe.
+       This completes from Recipe to Ingredient side of the relationship.
+     */
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
+    private Set<Ingredient> ingredientSet = new HashSet<>();
+
+    /*
         Recipe owns the Notes.
-        When a recipe is deleted, notes are also deleted
+        When a recipe is deleted, notes are also deleted.
      */
     @OneToOne(cascade = CascadeType.ALL)
     private Notes notes;
-
 
 
     /*
