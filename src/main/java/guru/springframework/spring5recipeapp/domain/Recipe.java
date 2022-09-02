@@ -17,6 +17,14 @@ public class Recipe {
     private Integer servings;
     private String source;
     private String url;
+
+    /*
+         Value too long for column "DIRECTIONS CHARACTER VARYING(255)": "U&'1 Cut avocado, remove flesh:
+         Cut the avocados in half. Remove seed. Score the... (1303)"; SQL statement:
+
+         Use @Lob Annotation for directions to add more than 255 characters
+     */
+    @Lob
     private String directions;
 
     /*

@@ -10,12 +10,14 @@ VALUES ('Mexican');
 INSERT INTO category (description)
 VALUES ('Fast Food');
 INSERT INTO unit_of_measure (description)
+VALUES ('Each');
+INSERT INTO unit_of_measure (description)
 VALUES ('Teaspoon');
 INSERT INTO unit_of_measure (description)
 VALUES ('Tablespoon');
 INSERT INTO unit_of_measure (description)
 VALUES ('Cup');
 INSERT INTO unit_of_measure (description)
-VALUES ('Pinch');
+VALUES ('Pint');
 INSERT INTO unit_of_measure (description)
-VALUES ('Ounce');
+VALUES ('Dash');
