@@ -87,6 +87,27 @@ public class Recipe {
     @ManyToMany
     @JoinTable(name = "recipe_category", joinColumns = @JoinColumn(name = "recipe_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories = new HashSet<>();
+
+    /*
+    ==
+     */
+
+    public Recipe addIngredient(Ingredient ingredient) {
+
+        //JPA Bidirectional Relationships
+        if (ingredient != null) ingredient.setRecipe(this);
+
+        this.ingredients.add(ingredient);
+        return this;
+    }
+
+    public void setNotes(Notes notes) {
+
+        //JPA Bidirectional Relationships
+        if (notes != null) notes.setRecipe(this);
+
+        this.notes = notes;
+    }
     /*
     ===
      */
@@ -183,9 +204,6 @@ public class Recipe {
         return notes;
     }
 
-    public void setNotes(Notes notes) {
-        this.notes = notes;
-    }
 
     public Set<Category> getCategories() {
         return categories;
