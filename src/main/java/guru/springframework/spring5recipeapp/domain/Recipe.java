@@ -1,12 +1,14 @@
 package guru.springframework.spring5recipeapp.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Data
+@EqualsAndHashCode(exclude = {"notes", "ingredients", "categories"})
 @Entity
 public class Recipe {
 
@@ -112,5 +114,5 @@ public class Recipe {
 
         this.notes = notes;
     }
-    
+
 }

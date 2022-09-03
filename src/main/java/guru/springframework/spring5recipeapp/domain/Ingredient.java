@@ -1,11 +1,13 @@
 package guru.springframework.spring5recipeapp.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Data
+@EqualsAndHashCode(exclude = {"unitOfMeasure", "recipe"})
 @Entity
 public class Ingredient {
 
@@ -17,15 +19,15 @@ public class Ingredient {
     private BigDecimal amount;
 
 
-    /*
-    ===
-     */
+        /*
+        ===
+         */
 
-    /*
-        We don't need a bidirectional relationship.
-        This is a unidirectional relationship from Ingredient to UnitOfMeasure.
-        We DO NOT cascade persistence events form Ingredient to UnitOfMeasure.
-     */
+        /*
+            We don't need a bidirectional relationship.
+            This is a unidirectional relationship from Ingredient to UnitOfMeasure.
+            We DO NOT cascade persistence events form Ingredient to UnitOfMeasure.
+         */
 
     /*
         @OneToOne is by default is EAGER.
@@ -43,9 +45,9 @@ public class Ingredient {
     //@JoinColumn(name = "recipe_id")
     private Recipe recipe;
 
-    /*
-    ===
-     */
+        /*
+        ===
+         */
 
     public Ingredient() {
     }
