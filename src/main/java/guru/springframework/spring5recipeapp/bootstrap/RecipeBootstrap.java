@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +31,20 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
     }
 
     @Override
+    @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
 
+        /*
+            Each time we go in and out of Spring Data JPA repositories,
+            We are going in and out of hibernate transaction and
+            the lazy collections need to get initialized within transaction
+            and within the same hibernate session.
+
+            Utilize a new annotation called @Transactional on the
+            onApplicationEvent(), spring framework will create a
+            transaction around this method and everything will happen
+            in the same transactional context.
+         */
         log.debug("Bootstrap Recipe Data");
         recipeRepository.saveAll(getRecipes());
         log.debug("Recipes loaded");
