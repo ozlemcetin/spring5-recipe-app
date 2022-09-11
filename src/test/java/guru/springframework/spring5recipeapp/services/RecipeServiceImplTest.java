@@ -29,6 +29,7 @@ class RecipeServiceImplTest {
     @Test
     void getRecipes() {
 
+        //given
         Set<Recipe> set = null;
         {
             set = new HashSet<>();
@@ -38,9 +39,11 @@ class RecipeServiceImplTest {
             Mockito.when(recipeRepository.findAll()).thenReturn(set);
         }
 
+        //when
         Set<Recipe> recipes = recipeService.getRecipes();
         Assertions.assertEquals(recipes.size(), set.size());
 
+        //then
         {
             //findAll() method in the RecipeRepository must be called only once
             Mockito.verify(recipeRepository, Mockito.times(1)).findAll();
