@@ -21,11 +21,13 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Set<Recipe> getRecipes() {
-        log.debug("RecipeServiceImpl fetching all recipes in getRecipes() method");
 
         Set<Recipe> recipes = new HashSet<>();
-        //recipeRepository.findAll().iterator().forEachRemaining(recipes::add);
-        recipeRepository.findAll().forEach(recipes::add);
+        {
+            log.debug("RecipeServiceImpl fetching all recipes from the repository");
+            //recipeRepository.findAll().iterator().forEachRemaining(recipes::add);
+            recipeRepository.findAll().forEach(recipes::add);
+        }
 
         return recipes;
     }
