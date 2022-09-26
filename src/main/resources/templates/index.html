@@ -33,30 +33,39 @@
                 </div>
 
                 <div class="panel-body">
+
                     <div class="table-responsive" th:if="${not #lists.isEmpty(recipes)}">
                         <table class="table table-hover">
                             <thead class="thead-inverse">
                             <tr>
                                 <th>ID</th>
                                 <th>Description</th>
+                                <th>View</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr th:remove="all">
                                 <td>123</td>
                                 <td>Tasty Goodness 1</td>
+                                <td><a href="#">View</a></td>
                             </tr>
                             <tr th:remove="all">
                                 <td>123</td>
                                 <td>Tasty Goodness 2</td>
+                                <td><a href="#">View</a></td>
                             </tr>
+
                             <tr th:each="recipe : ${recipes}">
+                                <!--/*thymesVar id="recipe" type="guru.springframework.spring5recipeapp.domain.Recipe"*/-->
                                 <td th:text="${recipe.id}">123</td>
                                 <td th:text="${recipe.description}">Tasty Goodness 3</td>
+                                <td><a href="#" th:href="@{'/recipe/show/' + ${recipe.id}}">View</a></td>
                             </tr>
+
                             </tbody>
                         </table>
                     </div>
+
                 </div>
             </div>
             <!--panel-->

@@ -78,8 +78,7 @@ class IndexControllerTest {
 
             Set<Recipe> returnedSet = argumentCaptor.getValue();
             Assertions.assertEquals(set.size(), returnedSet.size());
-        }
-        {
+
             Mockito.verify(recipeService, Mockito.times(1)).getRecipes();
         }
 
