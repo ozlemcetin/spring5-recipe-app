@@ -22,7 +22,7 @@ public class RecipeController {
         To pick up the id value out of the URL, use {id} in the @RequestMapping path value and
         @PathVariable String id in the method declaration
      */
-    @RequestMapping(path = "/recipe/show/{id}")
+    @RequestMapping(path = "/recipe/{id}/show")
     public String showById(@PathVariable String id, Model model) {
 
         model.addAttribute("recipe", recipeService.findById(Long.valueOf(id)));
@@ -38,12 +38,21 @@ public class RecipeController {
         return "recipe/recipeform";
     }
 
+    @RequestMapping(path = "/recipe/{id}/update")
+    public String updateById(@PathVariable String id, Model model) {
+
+        model.addAttribute("recipeCommand", recipeService.findCommandById(Long.valueOf(id)));
+
+        return "recipe/recipeform";
+    }
+
+
     @PostMapping("/recipe")
     //@RequestMapping(name = "/recipe", method = RequestMethod.POST)
     public String saveOrUpdateRecipe(@ModelAttribute RecipeCommand command) {
 
         RecipeCommand savedCommand = recipeService.saveRecipeCommand(command);
 
-        return "redirect:/recipe/show/" + savedCommand.getId();
+        return "redirect:/recipe/" + savedCommand.getId() + "/show";
     }
 }

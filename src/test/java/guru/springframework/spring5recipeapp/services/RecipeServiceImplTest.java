@@ -1,5 +1,6 @@
 package guru.springframework.spring5recipeapp.services;
 
+import guru.springframework.spring5recipeapp.commands.RecipeCommand;
 import guru.springframework.spring5recipeapp.converters.RecipeCommandToRecipe;
 import guru.springframework.spring5recipeapp.converters.RecipeToRecipeCommand;
 import guru.springframework.spring5recipeapp.domain.Recipe;
@@ -11,12 +12,16 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.test.util.AssertionErrors;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.when;
 
 class RecipeServiceImplTest {
 
@@ -110,6 +115,38 @@ class RecipeServiceImplTest {
         {
             //findById() method in the RecipeRepository must be called only once
             Mockito.verify(recipeRepository, Mockito.times(1)).findById(ArgumentMatchers.anyLong());
+        }
+    }
+
+    @Test
+    void getRecipeCommandByIdTest() {
+
+        //given
+        Long id = 1L;
+        {
+            Recipe recipe = new Recipe();
+            recipe.setId(1L);
+            Optional<Recipe> recipeOptional = Optional.of(recipe);
+
+            when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+        }
+        {
+            RecipeCommand recipeCommand = new RecipeCommand();
+            recipeCommand.setId(id);
+
+            when(recipeToCommand.convert(any())).thenReturn(recipeCommand);
+        }
+
+        //when
+        RecipeCommand command = recipeService.findCommandById(1L);
+        AssertionErrors.assertNotNull("Null recipe command returned", command);
+        Assertions.assertEquals(id, command.getId());
+
+
+        //then
+        {
+            Mockito.verify(recipeRepository, Mockito.times(1)).findById(anyLong());
+            Mockito.verify(recipeToCommand, Mockito.times(1)).convert(any());
         }
     }
 }

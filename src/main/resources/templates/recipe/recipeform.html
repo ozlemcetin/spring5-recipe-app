@@ -119,7 +119,10 @@
                                     <ul>
                                         <li th:remove="all">1 Cup of milk</li>
                                         <li th:remove="all">1 Teaspoon of chocolate</li>
-                                        <li th:remove="all">1 Teaspoon of Sugar
+                                        <li th:each="ingCommand : ${recipeCommand.ingredientCommands}"
+                                            th:text="${(ingCommand.getAmount() +
+                                        ' ' + ingCommand.getUnitOfMeasureCommand().getDescription() +
+                                        ' - ' + ingCommand.getDescription())}">1 Teaspoon of Sugar
                                         </li>
                                     </ul>
                                 </div>
@@ -155,7 +158,8 @@
 
                             <div class="row">
                                 <div class="col-md-12 form-group">
-                                    <textarea class="form-control" rows="3" th:field="*{notesCommand.recipeNotes}"></textarea>
+                                    <textarea class="form-control" rows="3"
+                                              th:field="*{notesCommand.recipeNotes}"></textarea>
                                 </div>
                             </div>
                         </div>
