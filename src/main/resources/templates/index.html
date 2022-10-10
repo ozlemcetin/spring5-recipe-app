@@ -21,7 +21,7 @@
 
 <body>
 
-<!--/*thymesVar id="recipe" type="guru.springframework.spring5recipeapp.domain.Recipe"*/-->
+<!--/*thymesVar id="recipe" type="domain.guru.springframework.Recipe"*/-->
 <div class="container-fluid" style="margin-top: 20px;">
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
@@ -43,6 +43,7 @@
                                 <th>Description</th>
                                 <th>View</th>
                                 <th>Update</th>
+                                <th>Delete</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -51,12 +52,14 @@
                                 <td>Tasty Goodness 1</td>
                                 <td><a href="#">View</a></td>
                                 <td><a href="#">Update</a></td>
+                                <td><a href="#">Delete</a></td>
                             </tr>
                             <tr th:remove="all">
                                 <td>123</td>
                                 <td>Tasty Goodness 2</td>
                                 <td><a href="#">View</a></td>
                                 <td><a href="#">Update</a></td>
+                                <td><a href="#">Delete</a></td>
                             </tr>
 
                             <tr th:each="recipe : ${recipes}">
@@ -65,6 +68,7 @@
                                 <td th:text="${recipe.description}">Tasty Goodness 3</td>
                                 <td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/show'}">View</a></td>
                                 <td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/update'}">Update</a></td>
+                                <td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/delete'}">Delete</a></td>
 
                             </tr>
 
