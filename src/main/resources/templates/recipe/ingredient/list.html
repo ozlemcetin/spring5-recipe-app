@@ -60,10 +60,8 @@
                             </tr>
                             <tr th:each="ingCommand : ${recipeCommand.ingredientCommands}">
                                 <td th:text="${ingCommand.id}">334</td>
-                                <td th:text="${ingCommand.amount} + ' ' + ${ingCommand.getUnitOfMeasureCommand().getDescription()} + ' - ' + ${ingCommand.description} + '/show'">
-                                    1
-                                    Teaspoon of
-                                    Sugar
+                                <td th:text="${ingCommand.amount} + ' ' + ${ingCommand.getUnitOfMeasureCommand().getDescription()} + ' - ' + ${ingCommand.description} ">
+                                    1 Teaspoon of Sugar
                                 </td>
                                 <td><a href="#"
                                        th:href="@{'/recipe/' + ${recipeCommand.id} + '/ingredient/' + ${ingCommand.id} + '/show'}">View</a>
