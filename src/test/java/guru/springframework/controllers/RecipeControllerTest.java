@@ -1,8 +1,8 @@
 package guru.springframework.controllers;
 
+import guru.springframework.commands.RecipeCommand;
 import guru.springframework.domain.Recipe;
 import guru.springframework.services.RecipeService;
-import guru.springframework.commands.RecipeCommand;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -23,6 +23,7 @@ class RecipeControllerTest {
 
     @Mock
     private RecipeService recipeService;
+
     @Mock
     private Model model;
 
@@ -51,9 +52,11 @@ class RecipeControllerTest {
             Recipe recipe = new Recipe();
             recipe.setId(id);
 
+            //when
             Mockito.when(recipeService.findById(anyLong())).thenReturn(recipe);
         }
 
+        //then
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/" + id + "/show"))
 
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -62,10 +65,9 @@ class RecipeControllerTest {
 
                 .andExpect(MockMvcResultMatchers.model().attributeExists("recipe"));
 
-        //then
-        {
-            Mockito.verify(recipeService, Mockito.times(1)).findById(anyLong());
-        }
+        //verify
+        Mockito.verify(recipeService, Mockito.times(1)).findById(anyLong());
+
     }
 
     @Test
@@ -89,9 +91,11 @@ class RecipeControllerTest {
             RecipeCommand command = new RecipeCommand();
             command.setId(id);
 
+            //when
             Mockito.when(recipeService.findCommandById(anyLong())).thenReturn(command);
         }
 
+        //then
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/" + id + "/update"))
 
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -99,10 +103,9 @@ class RecipeControllerTest {
                 .andExpect(MockMvcResultMatchers.view().name("recipe/recipeform"));
 
 
-        //then
-        {
-            Mockito.verify(recipeService, Mockito.times(1)).findCommandById(anyLong());
-        }
+        //verify
+        Mockito.verify(recipeService, Mockito.times(1)).findCommandById(anyLong());
+
 
     }
 
@@ -115,6 +118,7 @@ class RecipeControllerTest {
             RecipeCommand command = new RecipeCommand();
             command.setId(id);
 
+            //when
             Mockito.when(recipeService.saveRecipeCommand(any())).thenReturn(command);
         }
 
@@ -130,10 +134,9 @@ class RecipeControllerTest {
 
                 .andExpect(MockMvcResultMatchers.model().attributeExists("recipeCommand"));
 
-        //then
-        {
-            Mockito.verify(recipeService, Mockito.times(1)).saveRecipeCommand(any());
-        }
+        //verify
+        Mockito.verify(recipeService, Mockito.times(1)).saveRecipeCommand(any());
+
     }
 
 
@@ -143,17 +146,16 @@ class RecipeControllerTest {
         //given
         Long id = 1L;
 
-        //when
+        //then
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/" + id + "/delete"))
 
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
 
                 .andExpect(MockMvcResultMatchers.view().name("redirect:/"));
 
-        //then
-        {
-            Mockito.verify(recipeService, Mockito.times(1)).deleteById(anyLong());
-        }
+        //verify
+        Mockito.verify(recipeService, Mockito.times(1)).deleteById(anyLong());
+
     }
 
 

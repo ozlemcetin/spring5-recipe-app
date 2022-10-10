@@ -26,13 +26,13 @@ import static org.mockito.Mockito.when;
 class RecipeServiceImplTest {
 
     @Mock
-    RecipeToRecipeCommand recipeToCommand;
+    private RecipeToRecipeCommand recipeToCommand;
     @Mock
-    RecipeCommandToRecipe commandToRecipe;
+    private RecipeCommandToRecipe commandToRecipe;
     @Mock
     private RecipeRepository recipeRepository;
 
-    private RecipeServiceImpl recipeService;
+    private RecipeService recipeService;
 
     @BeforeEach
     void setUp() {
@@ -55,14 +55,15 @@ class RecipeServiceImplTest {
             set.add(new Recipe());
             set.add(new Recipe());
 
+            //when
             Mockito.when(recipeRepository.findAll()).thenReturn(set);
         }
 
-        //when
+        //then
         Set<Recipe> recipes = recipeService.getRecipes();
         Assertions.assertEquals(recipes.size(), set.size());
 
-        //then
+        //verify
         {
             //findAll() method in the RecipeRepository must be called only once
             Mockito.verify(recipeRepository, Mockito.times(1)).findAll();
@@ -80,15 +81,16 @@ class RecipeServiceImplTest {
             recipe.setId(id);
             recipeOptional = Optional.of(recipe);
 
+            //when
             Mockito.when(recipeRepository.findById(ArgumentMatchers.anyLong())).thenReturn(recipeOptional);
         }
 
-        //when
+        //then
         Recipe recipeReturned = recipeService.findById(id);
         Assertions.assertNotNull(recipeReturned);
         Assertions.assertEquals(id, recipeReturned.getId());
 
-        //then
+        //verify
         {
             //findById() method in the RecipeRepository must be called only once
             Mockito.verify(recipeRepository, Mockito.times(1)).findById(ArgumentMatchers.anyLong());
@@ -100,20 +102,20 @@ class RecipeServiceImplTest {
     void getRecipeById_NotFound() {
 
         //given
-        Optional<Recipe> recipeOptional = null;
         Long id = 1L;
         {
+            //when
             Mockito.when(recipeRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.empty());
         }
 
-        //when
+        //then
         RuntimeException exception = Assertions.assertThrows(RuntimeException.class, () -> {
             recipeService.findById(id);
         });
 
         Assertions.assertEquals("Recipe Not Found!", exception.getMessage());
 
-        //then
+        //verify
         {
             //findById() method in the RecipeRepository must be called only once
             Mockito.verify(recipeRepository, Mockito.times(1)).findById(ArgumentMatchers.anyLong());
@@ -130,22 +132,24 @@ class RecipeServiceImplTest {
             recipe.setId(1L);
             Optional<Recipe> recipeOptional = Optional.of(recipe);
 
+            //when
             when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
         }
         {
             RecipeCommand recipeCommand = new RecipeCommand();
             recipeCommand.setId(id);
 
+            //when
             when(recipeToCommand.convert(any())).thenReturn(recipeCommand);
         }
 
-        //when
+        //then
         RecipeCommand command = recipeService.findCommandById(1L);
         AssertionErrors.assertNotNull("Null recipe command returned", command);
         Assertions.assertEquals(id, command.getId());
 
 
-        //then
+        //verify
         {
             Mockito.verify(recipeRepository, Mockito.times(1)).findById(anyLong());
             Mockito.verify(recipeToCommand, Mockito.times(1)).convert(any());
@@ -157,16 +161,15 @@ class RecipeServiceImplTest {
 
         //given
         Long id = 1L;
-
-        //when
-        recipeService.deleteById(id);
-
-        //no 'when', since method has void return type
-
-        //then
         {
-            Mockito.verify(recipeRepository, Mockito.times(1)).deleteById(anyLong());
+            //no 'when', since method has void return type
         }
 
+        //then
+        recipeService.deleteById(id);
+
+
+        //verify
+        Mockito.verify(recipeRepository, Mockito.times(1)).deleteById(anyLong());
     }
 }

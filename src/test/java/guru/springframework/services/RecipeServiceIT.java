@@ -21,11 +21,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class RecipeServiceIT {
 
 
-    public static final String NEW_DESCRIPTION = "New Description";
+    private final String NEW_DESCRIPTION = "New Description";
     @Autowired
-    RecipeToRecipeCommand recipeToCommand;
+    private RecipeToRecipeCommand recipeToCommand;
     @Autowired
-    RecipeCommandToRecipe commandToRecipe;
+    private RecipeCommandToRecipe commandToRecipe;
     @Autowired
     private RecipeRepository recipeRepository;
     @Autowired
@@ -44,16 +44,15 @@ public class RecipeServiceIT {
         }
 
 
-        //when
+        //then
         testRecipeCommand.setDescription(NEW_DESCRIPTION);
         RecipeCommand savedRecipeCommand = recipeService.saveRecipeCommand(testRecipeCommand);
 
-        //then
+        //assert
         assertEquals(NEW_DESCRIPTION, savedRecipeCommand.getDescription());
         assertEquals(testRecipeCommand.getId(), savedRecipeCommand.getId());
         assertEquals(testRecipeCommand.getCategoryCommands().size(), savedRecipeCommand.getCategoryCommands().size());
         assertEquals(testRecipeCommand.getIngredientCommands().size(), savedRecipeCommand.getIngredientCommands().size());
-
 
     }
 }

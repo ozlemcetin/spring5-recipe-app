@@ -1,7 +1,7 @@
 package guru.springframework.controllers;
 
-import guru.springframework.services.RecipeService;
 import guru.springframework.domain.Recipe;
+import guru.springframework.services.RecipeService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,14 +60,15 @@ class IndexControllerTest {
                 set.add(recipe);
             }
 
+            //when
             Mockito.when(recipeService.getRecipes()).thenReturn(set);
         }
 
-        //when
+        //then
         String viewName = controller.getIndexPage(model);
         Assertions.assertEquals("index", viewName);
 
-        //then
+        //verify
         {
             ArgumentCaptor<Set<Recipe>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
 
@@ -81,8 +82,6 @@ class IndexControllerTest {
 
             Mockito.verify(recipeService, Mockito.times(1)).getRecipes();
         }
-
     }
-
 
 }
