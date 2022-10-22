@@ -74,18 +74,21 @@ public class IngredientServiceImpl implements IngredientService {
         }
 
         Long recipeId = command.getRecipeId();
-        Long ingredientId = command.getId();
+        Recipe recipe = null;
+        {
+            Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
 
-        Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
+            //todo toss error if not found!
+            if (!recipeOptional.isPresent()) {
+                log.error("Recipe not found for id: " + recipeId);
+                return null;
+            }
 
-        //todo toss error if not found!
-        if (!recipeOptional.isPresent()) {
-            log.error("Recipe not found for id: " + recipeId);
-            return null;
+            //recipe
+            recipe = recipeOptional.get();
         }
 
-        //recipe
-        Recipe recipe = recipeOptional.get();
+        Long ingredientId = command.getId();
         Optional<Ingredient> ingredientOptional = recipe.getIngredients().stream()
 
                 .filter(ingredient -> ingredient.getId().equals(ingredientId)).findFirst();
@@ -148,5 +151,35 @@ public class IngredientServiceImpl implements IngredientService {
 
 
         return toIngredientCommand.convert(savedIngredient);
+    }
+
+    @Override
+    public void deleteById(Long recipeId, Long idToDelete) {
+
+        log.debug("Deleting ingredient: " + recipeId + ":" + idToDelete);
+
+        Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
+        if (recipeOptional.isPresent()) {
+
+            log.debug("Found Recipe");
+            Recipe recipe = recipeOptional.get();
+
+            Optional<Ingredient> ingredientOptional = recipe.getIngredients().stream()
+
+                    .filter(ingredient -> ingredient.getId().equals(idToDelete)).findFirst();
+
+            if (ingredientOptional.isPresent()) {
+
+                log.debug("Found Ingredient");
+                Ingredient ingredientToDelete = ingredientOptional.get();
+
+                ingredientToDelete.setRecipe(null);
+                recipe.getIngredients().remove(ingredientOptional.get());
+
+                recipeRepository.save(recipe);
+            }
+        } else {
+            log.debug("Recipe Id Not found :" + recipeId);
+        }
     }
 }
