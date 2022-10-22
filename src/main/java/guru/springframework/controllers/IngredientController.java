@@ -1,6 +1,8 @@
 package guru.springframework.controllers;
 
 import guru.springframework.commands.IngredientCommand;
+import guru.springframework.commands.RecipeCommand;
+import guru.springframework.commands.UnitOfMeasureCommand;
 import guru.springframework.services.IngredientService;
 import guru.springframework.services.RecipeService;
 import guru.springframework.services.UnitOfMeasureService;
@@ -15,7 +17,6 @@ public class IngredientController {
 
     private final RecipeService recipeService;
     private final IngredientService ingredientService;
-
     private final UnitOfMeasureService unitOfMeasureService;
 
     public IngredientController(RecipeService recipeService, IngredientService ingredientService, UnitOfMeasureService unitOfMeasureService) {
@@ -28,7 +29,6 @@ public class IngredientController {
     public String listIngredients(@PathVariable String recipeId, Model model) {
 
         log.debug("Getting ingredient list for recipe id: " + recipeId);
-
         // use command object to avoid lazy load errors in Thymeleaf.
         model.addAttribute("recipeCommand", recipeService.findCommandById(Long.valueOf(recipeId)));
 
@@ -47,6 +47,38 @@ public class IngredientController {
     }
 
     @GetMapping
+    @RequestMapping("recipe/{recipeId}/ingredient/new")
+    public String newIngredient(@PathVariable String recipeId, Model model) {
+
+        //make sure we have a good id value
+        {
+            RecipeCommand recipeCommand = recipeService.findCommandById(Long.valueOf(recipeId));
+
+            //todo raise exception if null
+            if (recipeCommand == null) {
+                throw new RuntimeException("No recipe found for id: " + recipeId);
+            }
+        }
+
+        //need to return back parent id for hidden form property
+        {
+            IngredientCommand ingredientCommand = new IngredientCommand();
+            //id
+            ingredientCommand.setRecipeId(Long.valueOf(recipeId));
+            //description
+            //amount
+            ingredientCommand.setUnitOfMeasureCommand(new UnitOfMeasureCommand());
+
+            model.addAttribute("ingredientCommand", ingredientCommand);
+        }
+
+        model.addAttribute("listAllUnitOfMeasure", unitOfMeasureService.listAllUnitOfMeasure());
+
+        return "recipe/ingredient/ingredientform";
+    }
+
+
+    @GetMapping
     @RequestMapping("/recipe/{recipeId}/ingredient/{id}/update")
     public String updateRecipeIngredient(@PathVariable String recipeId, @PathVariable String id, Model model) {
 
@@ -63,7 +95,6 @@ public class IngredientController {
 
     @PostMapping("recipe/{recipeId}/ingredient")
     public String saveOrUpdate(@ModelAttribute IngredientCommand command) {
-
 
         IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command);
         log.debug("saved receipe id:" + savedCommand.getRecipeId());

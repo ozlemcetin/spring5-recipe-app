@@ -21,13 +21,12 @@ import java.util.HashSet;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class IngredientControllerTest {
-
 
     @Mock
     UnitOfMeasureService unitOfMeasureService;
@@ -39,7 +38,6 @@ class IngredientControllerTest {
     private Model model;
 
     private IngredientController controller;
-
     private MockMvc mockMvc;
 
     @BeforeEach
@@ -107,6 +105,37 @@ class IngredientControllerTest {
 
         //verify
         Mockito.verify(ingredientService, Mockito.times(1)).findByRecipeIdAndIngredientId(anyLong(), anyLong());
+    }
+
+    @Test
+    public void testNewIngredientForm() throws Exception {
+
+        //given
+        Long recipeId = 1L;
+        {
+            RecipeCommand recipeCommand = new RecipeCommand();
+            recipeCommand.setId(recipeId);
+
+            //when
+            when(recipeService.findCommandById(anyLong())).thenReturn(recipeCommand);
+            //when
+            when(unitOfMeasureService.listAllUnitOfMeasure()).thenReturn(new HashSet<>());
+        }
+
+        //then
+        mockMvc.perform(get("/recipe/" + recipeId + "/ingredient/new"))
+
+                .andExpect(status().isOk())
+
+                .andExpect(view().name("recipe/ingredient/ingredientform"))
+
+                .andExpect(model().attributeExists("ingredientCommand"))
+
+                .andExpect(model().attributeExists("listAllUnitOfMeasure"));
+
+        //verify
+        verify(recipeService, times(1)).findCommandById(anyLong());
+        verify(unitOfMeasureService, times(1)).listAllUnitOfMeasure();
     }
 
 

@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @Slf4j
@@ -67,13 +68,14 @@ public class IngredientServiceImpl implements IngredientService {
     public IngredientCommand saveIngredientCommand(IngredientCommand command) {
 
         //todo toss error if not found!
-        if (command == null || command.getId() == null || command.getRecipeId() == null) {
+        if (command == null) {
             log.error("IngredientCommand obj is null ");
             return null;
         }
 
-        Long ingredientId = command.getId();
         Long recipeId = command.getRecipeId();
+        Long ingredientId = command.getId();
+
         Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
 
         //todo toss error if not found!
@@ -82,48 +84,69 @@ public class IngredientServiceImpl implements IngredientService {
             return null;
         }
 
+        //recipe
         Recipe recipe = recipeOptional.get();
         Optional<Ingredient> ingredientOptional = recipe.getIngredients().stream()
 
                 .filter(ingredient -> ingredient.getId().equals(ingredientId)).findFirst();
 
+        String newDescription = command.getDescription();
+        BigDecimal newAmount = command.getAmount();
+        UnitOfMeasure newUnitOfMeasure = null;
+        {
+            //todo toss error if not found!
+            if (command.getUnitOfMeasureCommand() == null || command.getUnitOfMeasureCommand().getId() == null) {
+                log.error("UnitOfMeasureCommand obj is null ");
+                return null;
+            }
+
+            newUnitOfMeasure = unitOfMeasureRepository.findById(command.getUnitOfMeasureCommand().getId())
+                    //todo address this
+                    .orElseThrow(() -> new RuntimeException("UnitOfMeasure NOT FOUND"));
+        }
 
         if (ingredientOptional.isPresent()) {
 
             Ingredient ingredientFound = ingredientOptional.get();
-            ingredientFound.setDescription(command.getDescription());
-            ingredientFound.setAmount(command.getAmount());
-
-            //setUnitOfMeasure
-            {
-                //todo toss error if not found!
-                if (command.getUnitOfMeasureCommand() == null || command.getUnitOfMeasureCommand().getId() == null) {
-                    log.error("UnitOfMeasureCommand obj is null ");
-                    return null;
-                }
-
-                UnitOfMeasure unitOfMeasure = unitOfMeasureRepository.findById(command.getUnitOfMeasureCommand().getId())
-                        //todo address this
-                        .orElseThrow(() -> new RuntimeException("UnitOfMeasure NOT FOUND"));
-
-                ingredientFound.setUnitOfMeasure(unitOfMeasure);
-            }
+            ingredientFound.setDescription(newDescription);
+            ingredientFound.setAmount(newAmount);
+            ingredientFound.setUnitOfMeasure(newUnitOfMeasure);
 
         } else {
 
             //add new Ingredient
-            recipe.addIngredient(toIngredient.convert(command));
+            Ingredient ingredient = toIngredient.convert(command);
+            ingredient.setRecipe(recipe);
+            recipe.addIngredient(ingredient);
         }
 
         //save
         Recipe savedRecipe = recipeRepository.save(recipe);
 
         //todo check for fail
-        Ingredient savedIngredient = savedRecipe.getIngredients().stream()
+        Ingredient savedIngredient = null;
+        if (ingredientOptional.isPresent()) {
 
-                .filter(recipeIngredients -> recipeIngredients.getId().equals(ingredientId)).findFirst().get();
+            savedIngredient = savedRecipe.getIngredients().stream()
+
+                    .filter(ing -> ing.getId().equals(ingredientId))
+
+                    .findFirst().get();
+        } else {
+
+            final UnitOfMeasure finalNewUnitOfMeasure = newUnitOfMeasure;
+            savedIngredient = savedRecipe.getIngredients().stream()
+
+                    .filter(ing -> ing.getDescription().equals(newDescription))
+
+                    .filter(ing -> ing.getAmount().equals(newAmount))
+
+                    .filter(ing -> ing.getUnitOfMeasure().getId().equals(finalNewUnitOfMeasure.getId()))
+
+                    .findFirst().get();
+        }
+
 
         return toIngredientCommand.convert(savedIngredient);
-
     }
 }
