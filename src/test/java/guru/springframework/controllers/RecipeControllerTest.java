@@ -67,7 +67,6 @@ class RecipeControllerTest {
 
         //verify
         Mockito.verify(recipeService, Mockito.times(1)).findById(anyLong());
-
     }
 
     @Test
@@ -102,11 +101,8 @@ class RecipeControllerTest {
 
                 .andExpect(MockMvcResultMatchers.view().name("recipe/recipeform"));
 
-
         //verify
         Mockito.verify(recipeService, Mockito.times(1)).findCommandById(anyLong());
-
-
     }
 
     @Test
@@ -136,9 +132,7 @@ class RecipeControllerTest {
 
         //verify
         Mockito.verify(recipeService, Mockito.times(1)).saveRecipeCommand(any());
-
     }
-
 
     @Test
     void deleteById() throws Exception {
@@ -155,8 +149,5 @@ class RecipeControllerTest {
 
         //verify
         Mockito.verify(recipeService, Mockito.times(1)).deleteById(anyLong());
-
     }
-
-
 }

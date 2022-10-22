@@ -153,7 +153,6 @@ class IngredientControllerTest {
             when(unitOfMeasureService.listAllUnitOfMeasure()).thenReturn(new HashSet<>());
         }
 
-
         //then
         mockMvc.perform(get("/recipe/" + recipeId + "/ingredient/" + ingredientId + "/update"))
 
@@ -179,7 +178,6 @@ class IngredientControllerTest {
 
             //when
             when(ingredientService.saveIngredientCommand(any())).thenReturn(command);
-
         }
 
         //then
@@ -191,7 +189,6 @@ class IngredientControllerTest {
                 .andExpect(status().is3xxRedirection())
 
                 .andExpect(view().name("redirect:/recipe/" + recipeId + "/ingredient/" + ingredientId + "/show"));
-
     }
 
     @Test
@@ -209,7 +206,6 @@ class IngredientControllerTest {
                 .andExpect(view().name("redirect:/recipe/" + recipeId + "/ingredients"));
 
         verify(ingredientService, times(1)).deleteById(anyLong(), anyLong());
-
     }
 
 }

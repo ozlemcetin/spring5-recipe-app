@@ -30,7 +30,7 @@ import static org.mockito.Mockito.*;
 class IngredientServiceImplTest {
 
     @Mock
-    UnitOfMeasureRepository unitOfMeasureRepository;
+    private UnitOfMeasureRepository unitOfMeasureRepository;
     @Mock
     private RecipeRepository recipeRepository;
     private IngredientService ingredientService;

@@ -71,14 +71,13 @@ class IndexControllerTest {
         //verify
         {
             ArgumentCaptor<Set<Recipe>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
-
             Mockito.verify(model, Mockito.times(1))
                     //The fist value is equal to "recipes", the second value is going to be any set
                     //.addAttribute(ArgumentMatchers.eq("recipes"), ArgumentMatchers.anySet());
                     .addAttribute(ArgumentMatchers.eq("recipes"), argumentCaptor.capture());
 
-            Set<Recipe> returnedSet = argumentCaptor.getValue();
-            Assertions.assertEquals(set.size(), returnedSet.size());
+            Set<Recipe> capturedSet = argumentCaptor.getValue();
+            Assertions.assertEquals(set.size(), capturedSet.size());
 
             Mockito.verify(recipeService, Mockito.times(1)).getRecipes();
         }

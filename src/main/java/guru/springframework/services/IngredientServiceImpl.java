@@ -77,7 +77,6 @@ public class IngredientServiceImpl implements IngredientService {
         Recipe recipe = null;
         {
             Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
-
             //todo toss error if not found!
             if (!recipeOptional.isPresent()) {
                 log.error("Recipe not found for id: " + recipeId);
