@@ -54,11 +54,11 @@
                                 <div class="col-md-9 form-group">
                                     <div class="radio" th:remove="all">
                                         <input type="checkbox" value=""/>
-                                        <label> Cat 1 </label>
+                                        <label> Category 1 </label>
                                     </div>
                                     <div class="radio" th:remove="all">
                                         <input type="checkbox" value=""/>
-                                        <label> Cat 2 </label>
+                                        <label> Category 2 </label>
                                     </div>
                                 </div>
                             </div>
@@ -73,6 +73,14 @@
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label>Difficulty:</label>
+                                    <select class="form-control" th:field="*{difficulty}">
+                                        <!--T() expression means type-->
+                                        <option th:each="val : ${T(guru.springframework.domain.Difficulty).values()}"
+                                                th:text="${val.name()}"
+                                                th:value="${val.name()}">
+                                            option
+                                        </option>
+                                    </select>
                                     <select class="form-control" th:remove="all">
                                         <option>Easy</option>
                                         <option>Medium</option>

@@ -2,6 +2,7 @@ package guru.springframework.services;
 
 import guru.springframework.commands.UnitOfMeasureCommand;
 import guru.springframework.converters.UnitOfMeasureToUnitOfMeasureCommand;
+import guru.springframework.domain.Difficulty;
 import guru.springframework.repositories.UnitOfMeasureRepository;
 import org.springframework.stereotype.Service;
 
