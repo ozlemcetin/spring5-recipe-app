@@ -12,6 +12,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 public class RecipeCommand {
+
     private Long id;
     private String description;
     private Integer prepTime;
@@ -21,9 +22,8 @@ public class RecipeCommand {
     private String url;
     private String directions;
     private Difficulty difficulty;
+    private Byte[] image;
     private NotesCommand notesCommand;
     private Set<IngredientCommand> ingredientCommands = new HashSet<>();
     private Set<CategoryCommand> categoryCommands = new HashSet<>();
-
-
 }
