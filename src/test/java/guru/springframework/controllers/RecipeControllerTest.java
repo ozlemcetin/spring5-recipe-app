@@ -2,6 +2,7 @@ package guru.springframework.controllers;
 
 import guru.springframework.commands.RecipeCommand;
 import guru.springframework.domain.Recipe;
+import guru.springframework.exceptions.NotFoundException;
 import guru.springframework.services.RecipeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,9 @@ import org.springframework.ui.Model;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class RecipeControllerTest {
 
@@ -70,6 +74,18 @@ class RecipeControllerTest {
     }
 
     @Test
+    public void testGetRecipeNotFound() throws Exception {
+
+        //when
+        when(recipeService.findById(anyLong())).thenThrow(NotFoundException.class);
+
+        //then
+        mockMvc.perform(get("/recipe/1/show"))
+
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     void newRecipe() throws Exception {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/new"))
@@ -81,29 +97,6 @@ class RecipeControllerTest {
                 .andExpect(MockMvcResultMatchers.model().attributeExists("recipeCommand"));
     }
 
-    @Test
-    void updateById() throws Exception {
-
-        //given
-        Long id = 1L;
-        {
-            RecipeCommand command = new RecipeCommand();
-            command.setId(id);
-
-            //when
-            Mockito.when(recipeService.findCommandById(anyLong())).thenReturn(command);
-        }
-
-        //then
-        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/" + id + "/update"))
-
-                .andExpect(MockMvcResultMatchers.status().isOk())
-
-                .andExpect(MockMvcResultMatchers.view().name("recipe/recipeform"));
-
-        //verify
-        Mockito.verify(recipeService, Mockito.times(1)).findCommandById(anyLong());
-    }
 
     @Test
     void saveOrUpdateRecipe() throws Exception {
@@ -132,6 +125,31 @@ class RecipeControllerTest {
 
         //verify
         Mockito.verify(recipeService, Mockito.times(1)).saveRecipeCommand(any());
+    }
+
+
+    @Test
+    void updateById() throws Exception {
+
+        //given
+        Long id = 1L;
+        {
+            RecipeCommand command = new RecipeCommand();
+            command.setId(id);
+
+            //when
+            Mockito.when(recipeService.findCommandById(anyLong())).thenReturn(command);
+        }
+
+        //then
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/" + id + "/update"))
+
+                .andExpect(MockMvcResultMatchers.status().isOk())
+
+                .andExpect(MockMvcResultMatchers.view().name("recipe/recipeform"));
+
+        //verify
+        Mockito.verify(recipeService, Mockito.times(1)).findCommandById(anyLong());
     }
 
     @Test
