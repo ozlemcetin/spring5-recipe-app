@@ -21,6 +21,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 class RecipeControllerTest {
 
@@ -82,7 +83,9 @@ class RecipeControllerTest {
         //then
         mockMvc.perform(get("/recipe/1/show"))
 
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+
+                .andExpect(view().name("404error"));
     }
 
     @Test
