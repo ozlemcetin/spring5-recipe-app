@@ -45,7 +45,12 @@ class RecipeControllerTest {
         controller = new RecipeController(recipeService);
 
         //mockMvc
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(controller)
+
+                //wiring in controller advice for exception handling
+                .setControllerAdvice(new ExceptionHandlingController())
+
+                .build();
     }
 
     @Test
@@ -74,7 +79,7 @@ class RecipeControllerTest {
         Mockito.verify(recipeService, Mockito.times(1)).findById(anyLong());
     }
 
-    // @Test
+    @Test
     public void testGetRecipe_NotFoundException() throws Exception {
 
         //when
@@ -88,7 +93,7 @@ class RecipeControllerTest {
                 .andExpect(view().name("error"));
     }
 
-    //@Test
+    @Test
     public void testGetRecipe_NumberFormatException() throws Exception {
 
         //then

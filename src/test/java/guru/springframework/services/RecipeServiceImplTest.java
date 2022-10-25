@@ -114,7 +114,7 @@ class RecipeServiceImplTest {
             recipeService.findById(id);
         });
 
-        Assertions.assertEquals("Recipe Not Found!", exception.getMessage());
+        Assertions.assertEquals("Recipe not found for the if value of " + id, exception.getMessage());
 
         //verify
         {
