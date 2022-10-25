@@ -1,18 +1,23 @@
 package guru.springframework.controllers;
 
 import guru.springframework.commands.RecipeCommand;
-import guru.springframework.exceptions.NotFoundException;
 import guru.springframework.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import javax.validation.Valid;
 
 @Slf4j
 @Controller
 public class RecipeController {
+
+    public static final String RECIPE_RECIPEFORM_URL = "recipe/recipeform";
 
     private final RecipeService recipeService;
 
@@ -36,17 +41,21 @@ public class RecipeController {
     public String newRecipe(Model model) {
 
         model.addAttribute("recipeCommand", new RecipeCommand());
-
-        return "recipe/recipeform";
+        return RECIPE_RECIPEFORM_URL;
     }
 
 
     @PostMapping("/recipe")
     //@RequestMapping(name = "/recipe", method = RequestMethod.POST)
-    public String saveOrUpdateRecipe(@ModelAttribute RecipeCommand command) {
+    public String saveOrUpdateRecipe(@Valid @ModelAttribute("recipeCommand") RecipeCommand command, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+
+            bindingResult.getAllErrors().forEach(objectError -> log.debug(objectError.toString()));
+            return RECIPE_RECIPEFORM_URL;
+        }
 
         RecipeCommand savedCommand = recipeService.saveRecipeCommand(command);
-
         return "redirect:/recipe/" + savedCommand.getId() + "/show";
     }
 
@@ -54,8 +63,7 @@ public class RecipeController {
     public String updateById(@PathVariable String id, Model model) {
 
         model.addAttribute("recipeCommand", recipeService.findCommandById(Long.valueOf(id)));
-
-        return "recipe/recipeform";
+        return RECIPE_RECIPEFORM_URL;
     }
 
 
@@ -63,6 +71,7 @@ public class RecipeController {
     public String deleteById(@PathVariable String id) {
 
         log.debug("Deleting recipe id: " + id);
+
         recipeService.deleteById(Long.valueOf(id));
         return "redirect:/";
     }

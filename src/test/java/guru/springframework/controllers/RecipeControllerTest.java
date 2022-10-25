@@ -111,7 +111,7 @@ class RecipeControllerTest {
 
                 .andExpect(MockMvcResultMatchers.status().isOk())
 
-                .andExpect(MockMvcResultMatchers.view().name("recipe/recipeform"))
+                .andExpect(MockMvcResultMatchers.view().name(RecipeController.RECIPE_RECIPEFORM_URL))
 
                 .andExpect(MockMvcResultMatchers.model().attributeExists("recipeCommand"));
     }
@@ -131,10 +131,15 @@ class RecipeControllerTest {
         }
 
         //POST
-        mockMvc.perform(MockMvcRequestBuilders.post("/recipe").contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        //        .param("id", "")
-                        //        .param("description", "")
-                )
+        mockMvc.perform(MockMvcRequestBuilders.post("/recipe")
+
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+
+                        .param("id", "1")
+
+                        .param("description", "some string")
+
+                        .param("directions", "spme string"))
 
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
 
@@ -146,6 +151,33 @@ class RecipeControllerTest {
         Mockito.verify(recipeService, Mockito.times(1)).saveRecipeCommand(any());
     }
 
+    @Test
+    void saveOrUpdateRecipe_BeanValidationFail() throws Exception {
+
+        //given
+        Long id = 1L;
+        {
+            RecipeCommand command = new RecipeCommand();
+            command.setId(id);
+
+            //when
+            Mockito.when(recipeService.saveRecipeCommand(any())).thenReturn(command);
+        }
+
+        //POST
+        mockMvc.perform(MockMvcRequestBuilders.post("/recipe")
+
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+
+                        //validation fails
+                        .param("description", ""))
+
+                .andExpect(MockMvcResultMatchers.status().isOk())
+
+                .andExpect(MockMvcResultMatchers.view().name(RecipeController.RECIPE_RECIPEFORM_URL))
+
+                .andExpect(MockMvcResultMatchers.model().attributeExists("recipeCommand"));
+    }
 
     @Test
     void updateById() throws Exception {
@@ -165,7 +197,7 @@ class RecipeControllerTest {
 
                 .andExpect(MockMvcResultMatchers.status().isOk())
 
-                .andExpect(MockMvcResultMatchers.view().name("recipe/recipeform"));
+                .andExpect(MockMvcResultMatchers.view().name(RecipeController.RECIPE_RECIPEFORM_URL));
 
         //verify
         Mockito.verify(recipeService, Mockito.times(1)).findCommandById(anyLong());
