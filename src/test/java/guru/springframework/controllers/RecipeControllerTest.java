@@ -74,8 +74,8 @@ class RecipeControllerTest {
         Mockito.verify(recipeService, Mockito.times(1)).findById(anyLong());
     }
 
-    @Test
-    public void testGetRecipeNotFound() throws Exception {
+    // @Test
+    public void testGetRecipe_NotFoundException() throws Exception {
 
         //when
         when(recipeService.findById(anyLong())).thenThrow(NotFoundException.class);
@@ -85,7 +85,18 @@ class RecipeControllerTest {
 
                 .andExpect(status().isNotFound())
 
-                .andExpect(view().name("404error"));
+                .andExpect(view().name("error"));
+    }
+
+    //@Test
+    public void testGetRecipe_NumberFormatException() throws Exception {
+
+        //then
+        mockMvc.perform(get("/recipe/abc/show"))
+
+                .andExpect(status().isBadRequest())
+
+                .andExpect(view().name("error"));
     }
 
     @Test
