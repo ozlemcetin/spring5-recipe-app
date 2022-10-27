@@ -21,7 +21,7 @@ public class RecipeCommand {
     private Long id;
 
     @NotBlank
-    @Size(min = 3, max = 255)
+    @Size(min = 3, max = 255, message = "'${validatedValue}' length must be between {min} and {max} characters.")
     private String description;
 
     @Min(1)
